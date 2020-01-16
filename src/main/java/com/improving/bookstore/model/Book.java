@@ -3,7 +3,9 @@ package com.improving.bookstore.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Book {
+public final class Book {
+
+    private static final double PAGES_PER_DOLLAR_RATIO = 30.0;
 
     private String title;
     private Author author;
@@ -12,15 +14,22 @@ public class Book {
     private String isbn;
     private int numberOfPages;
     private BigDecimal price;
+    private Genre genre;
 
-    public Book(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, BigDecimal price) {
+    public Book(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.publishYear = publishYear;
         this.isbn = isbn;
         this.numberOfPages = numberOfPages;
-        this.price = price;
+        this.genre = genre;
+        this.price = calculateSalesPrice();
+    }
+
+    public Book(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre, BigDecimal price) {
+        this(title, author, publisher, publishYear, isbn, numberOfPages, genre);
+        this.price = Objects.requireNonNullElseGet(price, this::calculateSalesPrice);
     }
 
     public String getTitle() {
@@ -47,8 +56,16 @@ public class Book {
         return numberOfPages;
     }
 
+    public Genre getGenre() {
+        return genre;
+    }
+
     public BigDecimal getPrice() {
         return price;
+    }
+
+    private BigDecimal calculateSalesPrice() {
+        return BigDecimal.valueOf((getNumberOfPages() / PAGES_PER_DOLLAR_RATIO) * genre.getPricingFactor());
     }
 
     @Override

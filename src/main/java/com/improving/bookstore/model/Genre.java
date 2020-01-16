@@ -2,7 +2,7 @@ package com.improving.bookstore.model;
 
 import java.util.Objects;
 
-public class Genre {
+public final class Genre {
 
     private String name;
     private double pricingFactor;

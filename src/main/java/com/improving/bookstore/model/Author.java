@@ -2,7 +2,7 @@ package com.improving.bookstore.model;
 
 import java.util.Objects;
 
-public class Author {
+public final class Author {
 
     private String firstName;
     private String middleName;
