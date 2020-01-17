@@ -16,6 +16,10 @@ public final class Book {
     private BigDecimal price;
     private Genre genre;
 
+    public Book() {
+
+    }
+
     public Book(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre) {
         this.title = title;
         this.author = author;
@@ -27,41 +31,72 @@ public final class Book {
         this.price = calculateSalesPrice();
     }
 
-    public Book(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre, BigDecimal price) {
-        this(title, author, publisher, publishYear, isbn, numberOfPages, genre);
-        this.price = Objects.requireNonNullElseGet(price, this::calculateSalesPrice);
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Author getAuthor() {
         return author;
     }
 
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
     public String getPublisher() {
         return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public int getPublishYear() {
         return publishYear;
     }
 
+    public void setPublishYear(int publishYear) {
+        this.publishYear = publishYear;
+    }
+
     public String getIsbn() {
         return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public int getNumberOfPages() {
         return numberOfPages;
     }
 
+    public void setNumberOfPages(int numberOfPages) {
+        this.numberOfPages = numberOfPages;
+    }
+
     public Genre getGenre() {
         return genre;
     }
 
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public void setPrice(BigDecimal newPrice) {
+        this.price = Objects.requireNonNullElseGet(newPrice, this::calculateSalesPrice);
+    }
+
+    public void resetPrice() {
+        price = calculateSalesPrice();
     }
 
     private BigDecimal calculateSalesPrice() {

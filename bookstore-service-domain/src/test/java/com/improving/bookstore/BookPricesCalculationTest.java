@@ -20,7 +20,7 @@ public class BookPricesCalculationTest {
     private Offer offer;
 
     @Test
-    public void book_sales_price_is_calculated() {
+    public void book_sales_price_is_calculated_from_page_count() {
         given_a_book_with_page_count(300);
         when_its_sales_price_is_calculated();
         then_the_calculated_sales_price_is(BigDecimal.valueOf(10.0));
@@ -28,19 +28,6 @@ public class BookPricesCalculationTest {
         given_a_book_with_page_count(150);
         when_its_sales_price_is_calculated();
         then_the_calculated_sales_price_is(BigDecimal.valueOf(5.0));
-    }
-
-    @Test
-    public void book_offer_price_is_calculated_from_sales_price() {
-        given_a_book_with_sales_price(BigDecimal.valueOf(10.0));
-        given_an_offer_to_buy_the_book();
-        when_its_offer_price_is_calculated();
-        then_the_calculated_offer_price_is(BigDecimal.valueOf(7.0));
-
-        given_a_book_with_sales_price(BigDecimal.valueOf(15.0));
-        given_an_offer_to_buy_the_book();
-        when_its_offer_price_is_calculated();
-        then_the_calculated_offer_price_is(BigDecimal.valueOf(10.5));
     }
 
     @Test
@@ -58,10 +45,6 @@ public class BookPricesCalculationTest {
 
     private void given_a_book_with_page_count(int pageCount) {
         book = new Book("A Book Title", null, "A Publisher", 2019, "ISBN1", pageCount, getGenre());
-    }
-
-    private void given_a_book_with_sales_price(BigDecimal salesPrice) {
-        book = new Book("A Book Title", null, "A Publisher", 2019, "ISBN1", 300, getGenre(), salesPrice);
     }
 
     private void given_an_offer_to_buy_the_book() {
