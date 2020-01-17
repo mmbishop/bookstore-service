@@ -3,6 +3,8 @@ package com.improving.bookstore;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.model.Offer;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -75,11 +77,11 @@ public class BookPricesCalculationTest {
     }
 
     private void then_the_calculated_sales_price_is(BigDecimal expectedSalesPrice) {
-        assertThat(salesPrice, is(expectedSalesPrice));
+        MatcherAssert.assertThat(salesPrice, CoreMatchers.is(expectedSalesPrice));
     }
 
     private void then_the_calculated_offer_price_is(BigDecimal expectedOfferPrice) {
-        assertThat(offerPrice, is(expectedOfferPrice));
+        MatcherAssert.assertThat(offerPrice, CoreMatchers.is(expectedOfferPrice));
     }
 
     private Genre getGenre() {
