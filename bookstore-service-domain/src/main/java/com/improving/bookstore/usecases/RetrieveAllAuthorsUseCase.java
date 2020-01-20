@@ -5,7 +5,7 @@ import com.improving.bookstore.repositories.AuthorRepository;
 
 import java.util.List;
 
-public class RetrieveAllAuthorsUseCase {
+public class RetrieveAllAuthorsUseCase implements EntityRetrievalUseCase<Author> {
 
     private AuthorRepository authorRepository;
 

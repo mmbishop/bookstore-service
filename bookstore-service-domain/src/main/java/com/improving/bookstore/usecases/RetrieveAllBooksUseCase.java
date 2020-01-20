@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class RetrieveAllBooksUseCase {
+public class RetrieveAllBooksUseCase implements EntityRetrievalUseCase<Book> {
 
     private BookRepository bookRepository;
 

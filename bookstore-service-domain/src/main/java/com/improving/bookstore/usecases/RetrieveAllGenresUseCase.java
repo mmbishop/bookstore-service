@@ -5,7 +5,7 @@ import com.improving.bookstore.repositories.GenreRepository;
 
 import java.util.List;
 
-public class RetrieveAllGenresUseCase {
+public class RetrieveAllGenresUseCase implements EntityRetrievalUseCase<Genre> {
 
     private GenreRepository genreRepository;
 

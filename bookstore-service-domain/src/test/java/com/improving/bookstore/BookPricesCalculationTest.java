@@ -48,7 +48,7 @@ public class BookPricesCalculationTest {
     }
 
     private void given_an_offer_to_buy_the_book() {
-        offer = new Offer(book, "Science Fiction");
+        offer = new Offer(book);
     }
 
     private void when_its_sales_price_is_calculated() {

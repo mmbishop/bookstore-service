@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.CoreMatchers.is;
 
-public class BookRetrievalTest {
+public class BookRetrievalUseCasesTest {
 
     private BookRepository bookRepository;
     private List<Book> bookInventory = getBookInventory();
@@ -64,7 +64,7 @@ public class BookRetrievalTest {
 
     private void when_a_book_is_requested_by_title() {
         when(bookRepository.getBooksByTitle("Foundation")).thenReturn(List.of(getBook("Foundation")));
-        bookList = new RetrieveBooksByTitleUseCase(bookRepository).invoke("Foundation");
+        bookList = new RetrieveBooksByTitleUseCase("Foundation", bookRepository).invoke();
     }
 
     private void when_all_books_are_requested_by_author() {
@@ -73,7 +73,7 @@ public class BookRetrievalTest {
                 getBook("Foundation"),
                 getBook("Foundation and Empire")
         ));
-        bookList = new RetrieveBooksByAuthorUseCase(bookRepository).invoke(isaacAsimov);
+        bookList = new RetrieveBooksByAuthorUseCase(isaacAsimov, bookRepository).invoke();
     }
 
     private void when_all_books_are_requested_by_genre() {
@@ -82,7 +82,7 @@ public class BookRetrievalTest {
                 getBook("Foundation and Empire"),
                 getBook("Fahrenheit 451")
         ));
-        bookList = new RetrieveBooksByGenreUseCase(bookRepository).invoke("Science Fiction");
+        bookList = new RetrieveBooksByGenreUseCase("Science Fiction", bookRepository).invoke();
     }
 
     private void then_all_books_are_retrieved() {
