@@ -88,6 +88,9 @@ public final class Book {
     }
 
     public BigDecimal getPrice() {
+        if (price == null) {
+            price = calculateSalesPrice();
+        }
         return price;
     }
 

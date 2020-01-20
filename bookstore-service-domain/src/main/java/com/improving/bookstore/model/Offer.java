@@ -8,26 +8,20 @@ public final class Offer {
     private static final double DESIRED_PROFIT_MARGIN_RATIO = 0.3;
 
     private Book book;
-    private String genreName;
     private BigDecimal offerPrice;
 
-    public Offer(Book book, String genreName) {
+    public Offer(Book book) {
         this.book = book;
-        this.genreName = genreName;
         this.offerPrice = calculateOfferPrice();
     }
 
-    public Offer(Book book, String genreName, BigDecimal offerPrice) {
-        this(book, genreName);
+    public Offer(Book book, BigDecimal offerPrice) {
+        this(book);
         this.offerPrice = Objects.requireNonNullElseGet(offerPrice, this::calculateOfferPrice);
     }
 
     public Book getBook() {
         return book;
-    }
-
-    public String getGenreName() {
-        return genreName;
     }
 
     public BigDecimal getOfferPrice() {
