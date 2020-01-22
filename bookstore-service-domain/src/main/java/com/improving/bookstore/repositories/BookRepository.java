@@ -22,6 +22,6 @@ public interface BookRepository {
 
     void deleteBook(Book book);
 
-    void saveBook(int bookId, Book book);
+    void saveBook(Book book);
 
 }

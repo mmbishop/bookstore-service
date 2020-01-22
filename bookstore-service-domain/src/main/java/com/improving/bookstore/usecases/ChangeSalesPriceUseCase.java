@@ -22,7 +22,7 @@ public class ChangeSalesPriceUseCase {
         Optional<Book> book = bookRepository.getBookById(bookId);
         if (book.isPresent()) {
             book.get().setPrice(newPrice);
-            bookRepository.saveBook(bookId, book.get());
+            bookRepository.saveBook(book.get());
         }
         else {
             throw new BookNotFoundException("No book found for ID " + bookId);

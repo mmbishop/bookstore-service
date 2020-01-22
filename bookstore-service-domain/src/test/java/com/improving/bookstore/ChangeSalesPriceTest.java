@@ -4,7 +4,9 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.BookRepository;
+import com.improving.bookstore.usecases.BookNotFoundException;
 import com.improving.bookstore.usecases.ChangeSalesPriceUseCase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -29,6 +31,12 @@ public class ChangeSalesPriceTest {
         then_the_sales_price_is_changed();
     }
 
+    @Test
+    void an_error_occurs_when_attempting_to_change_the_sales_price_of_a_book_we_do_not_have() {
+        given_a_book_repository();
+        Assertions.assertThrows(BookNotFoundException.class, this::when_a_sales_price_change_is_requested_for_a_book_we_do_not_have);
+    }
+
     private void given_a_book_repository() {
         bookRepository = Mockito.mock(BookRepository.class);
     }
@@ -43,9 +51,14 @@ public class ChangeSalesPriceTest {
         changeSalesPriceUseCase.invoke();
     }
 
+    private void when_a_sales_price_change_is_requested_for_a_book_we_do_not_have() {
+        ChangeSalesPriceUseCase changeSalesPriceUseCase = new ChangeSalesPriceUseCase(0, BigDecimal.valueOf(35.0), bookRepository);
+        changeSalesPriceUseCase.invoke();
+    }
+
     private void then_the_sales_price_is_changed() {
         assertThat(book.getPrice(), is(BigDecimal.valueOf(35.0)));
-        verify(bookRepository).saveBook(1, book);
+        verify(bookRepository).saveBook(book);
     }
 
     private Book getBook() {

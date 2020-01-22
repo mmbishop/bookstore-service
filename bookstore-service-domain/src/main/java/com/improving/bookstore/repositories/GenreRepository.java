@@ -9,8 +9,6 @@ public interface GenreRepository {
 
     void addGenre(Genre genre);
 
-    void deleteGenre(Genre genre);
-
     Optional<Genre> getGenreByName(String genreName);
 
     List<Genre> getAllGenres();

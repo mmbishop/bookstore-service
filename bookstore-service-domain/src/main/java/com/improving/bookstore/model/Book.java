@@ -7,6 +7,7 @@ public final class Book {
 
     private static final double PAGES_PER_DOLLAR_RATIO = 30.0;
 
+    private int id;
     private String title;
     private Author author;
     private String publisher;
@@ -29,6 +30,15 @@ public final class Book {
         this.numberOfPages = numberOfPages;
         this.genre = genre;
         this.price = calculateSalesPrice();
+    }
+
+    public Book(int id, String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre) {
+        this(title, author, publisher, publishYear, isbn, numberOfPages, genre);
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
