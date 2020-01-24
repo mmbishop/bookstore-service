@@ -7,7 +7,6 @@ import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.repositories.GenreRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -17,7 +16,6 @@ public class PurchaseBookUseCase {
     private BookRepository bookRepository;
     private GenreRepository genreRepository;
 
-    @Autowired
     public PurchaseBookUseCase(BookRepository bookRepository, AuthorRepository authorRepository,
                                GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
