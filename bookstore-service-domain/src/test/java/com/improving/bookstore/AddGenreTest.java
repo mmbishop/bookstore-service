@@ -30,7 +30,7 @@ public class AddGenreTest {
     }
 
     private void when_a_request_is_made_to_add_the_genre() {
-        new AddGenreUseCase(genre, genreRepository).invoke();
+        new AddGenreUseCase(genreRepository).addGenre(genre);
     }
 
     private void then_the_genre_is_added() {

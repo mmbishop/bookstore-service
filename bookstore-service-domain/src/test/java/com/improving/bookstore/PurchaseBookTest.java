@@ -3,7 +3,7 @@ package com.improving.bookstore;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
-import com.improving.bookstore.model.Offer;
+import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.repositories.GenreRepository;
@@ -28,7 +28,7 @@ public class PurchaseBookTest {
     private Book book;
     private BookRepository bookRepository;
     private GenreRepository genreRepository;
-    private Offer offer;
+    private BookPurchaseInvoice offer;
 
     @Test
     void book_is_purchased_when_genre_is_one_that_the_bookstore_wants() {
@@ -98,14 +98,13 @@ public class PurchaseBookTest {
     }
 
     private void when_the_book_is_sold_to_the_bookstore_for_genre(String genreName) {
-        PurchaseBookUseCase purchaseBookUseCase = new PurchaseBookUseCase(book, genreName, bookRepository, authorRepository,
-                genreRepository);
-        offer = purchaseBookUseCase.invoke();
+        PurchaseBookUseCase purchaseBookUseCase = new PurchaseBookUseCase(bookRepository, authorRepository, genreRepository);
+        offer = purchaseBookUseCase.purchaseBook(book, genreName);
     }
 
     private void then_an_offer_is_generated() {
         assertThat(offer, is(not(nullValue())));
-        assertThat(offer.getOfferPrice(), is(BigDecimal.valueOf(7.0)));
+        assertThat(offer.getPurchasePrice(), is(BigDecimal.valueOf(7.0)));
     }
 
     private void then_the_book_is_added_to_the_inventory() {

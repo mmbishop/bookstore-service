@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +48,20 @@ public class BookMapperTest {
         given_a_book_domain_entity();
         when_the_book_domain_entity_is_mapped_to_a_data_entity();
         then_the_book_data_entity_is_produced();
+    }
+
+    @Test
+    void mapper_returns_null_when_data_entity_is_null() {
+        given_a_set_of_mappers();
+        when_a_null_book_data_entity_is_mapped_to_a_domain_entity();
+        then_the_book_domain_entity_is_null();
+    }
+
+    @Test
+    void mapper_returns_null_when_domain_entity_is_null() {
+        given_a_set_of_mappers();
+        when_the_book_domain_entity_is_mapped_to_a_data_entity();
+        then_the_book_data_entity_is_null();
     }
 
     private void given_a_set_of_mappers() {
@@ -108,6 +123,14 @@ public class BookMapperTest {
         bookDataEntity = bookMapper.mapFrom(bookDomainEntity);
     }
 
+    private void when_a_null_book_domain_entity_is_mapped_to_a_data_entity() {
+        bookDataEntity = bookMapper.mapFrom((Book) null);
+    }
+
+    private void when_a_null_book_data_entity_is_mapped_to_a_domain_entity() {
+        bookDomainEntity = bookMapper.mapFrom((BookData) null);
+    }
+
     private void then_the_book_domain_entity_is_produced() {
         assertThat(bookDomainEntity.getId(), is(1));
         assertThat(bookDomainEntity.getTitle(), is("The Tales of Edgar Allan Poe"));
@@ -140,6 +163,14 @@ public class BookMapperTest {
         GenreData genreData = bookDataEntity.getGenre();
         assertThat(genreData.getName(), is("Fiction"));
         assertThat(genreData.getPricingFactor(), is(1.0));
+    }
+
+    private void then_the_book_domain_entity_is_null() {
+        assertThat(bookDomainEntity, is(nullValue()));
+    }
+
+    private void then_the_book_data_entity_is_null() {
+        assertThat(bookDataEntity, is(nullValue()));
     }
 
 }

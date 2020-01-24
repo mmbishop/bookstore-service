@@ -2,9 +2,7 @@ package com.improving.bookstore;
 
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
-import com.improving.bookstore.model.Offer;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
+import com.improving.bookstore.model.BookPurchaseInvoice;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,7 +15,7 @@ public class BookPricesCalculationTest {
     private Book book;
     private BigDecimal offerPrice;
     private BigDecimal salesPrice;
-    private Offer offer;
+    private BookPurchaseInvoice offer;
 
     @Test
     public void book_sales_price_is_calculated_from_page_count() {
@@ -48,7 +46,7 @@ public class BookPricesCalculationTest {
     }
 
     private void given_an_offer_to_buy_the_book() {
-        offer = new Offer(book);
+        offer = new BookPurchaseInvoice(book);
     }
 
     private void when_its_sales_price_is_calculated() {
@@ -56,7 +54,7 @@ public class BookPricesCalculationTest {
     }
 
     private void when_its_offer_price_is_calculated() {
-        offerPrice = offer.getOfferPrice();
+        offerPrice = offer.getPurchasePrice();
     }
 
     private void then_the_calculated_sales_price_is(BigDecimal expectedSalesPrice) {

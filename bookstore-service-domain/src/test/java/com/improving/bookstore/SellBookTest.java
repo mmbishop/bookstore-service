@@ -46,11 +46,11 @@ public class SellBookTest {
 
     private void when_the_book_is_sold() {
         when(bookRepository.getBookById(1)).thenReturn(Optional.of(book));
-        new SellBookUseCase(1, bookRepository).invoke();
+        new SellBookUseCase(bookRepository).sellBook(1);
     }
 
     private void when_an_attempt_is_made_to_sell_a_book_that_is_not_in_the_inventory() {
-        new SellBookUseCase(2, bookRepository).invoke();
+        new SellBookUseCase(bookRepository).sellBook(2);
     }
 
     private void then_the_book_is_removed_from_the_inventory() {

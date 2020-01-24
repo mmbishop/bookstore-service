@@ -2,23 +2,21 @@ package com.improving.bookstore.usecases;
 
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.repositories.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 public class ChangeSalesPriceUseCase {
 
-    private BigDecimal newPrice;
     private BookRepository bookRepository;
-    private int bookId;
 
-    public ChangeSalesPriceUseCase(int bookId, BigDecimal newPrice, BookRepository bookRepository) {
-        this.newPrice = newPrice;
+    @Autowired
+    public ChangeSalesPriceUseCase(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.bookId = bookId;
     }
 
-    public void invoke() {
+    public void changeSalesPrice(int bookId, BigDecimal newPrice) {
         Optional<Book> book = bookRepository.getBookById(bookId);
         if (book.isPresent()) {
             book.get().setPrice(newPrice);

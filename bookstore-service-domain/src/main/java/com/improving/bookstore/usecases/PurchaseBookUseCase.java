@@ -3,37 +3,35 @@ package com.improving.bookstore.usecases;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
-import com.improving.bookstore.model.Offer;
+import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.repositories.GenreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
 public class PurchaseBookUseCase {
 
     private AuthorRepository authorRepository;
-    private Book book;
     private BookRepository bookRepository;
     private GenreRepository genreRepository;
-    private String genreName;
 
-    public PurchaseBookUseCase(Book book, String genreName, BookRepository bookRepository, AuthorRepository authorRepository,
+    @Autowired
+    public PurchaseBookUseCase(BookRepository bookRepository, AuthorRepository authorRepository,
                                GenreRepository genreRepository) {
-        this.book = book;
-        this.genreName = genreName;
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
     }
 
-    public Offer invoke() {
+    public BookPurchaseInvoice purchaseBook(Book book, String genreName) {
         Optional<Genre> genre = genreRepository.getGenreByName(genreName);
         if (genre.isPresent()) {
             book.setGenre(genre.get());
             addAuthorIfNotAlreadyInTheRepository(book.getAuthor());
             bookRepository.addBook(book);
-            return new Offer(book);
+            return new BookPurchaseInvoice(book);
         }
         throw new UnwantedGenreException("Bookstore does not want books of genre " + genreName);
     }

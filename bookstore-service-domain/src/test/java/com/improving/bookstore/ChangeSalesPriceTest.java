@@ -47,13 +47,13 @@ public class ChangeSalesPriceTest {
 
     private void when_a_sales_price_change_is_requested() {
         when(bookRepository.getBookById(1)).thenReturn(Optional.of(book));
-        ChangeSalesPriceUseCase changeSalesPriceUseCase = new ChangeSalesPriceUseCase(1, BigDecimal.valueOf(35.0), bookRepository);
-        changeSalesPriceUseCase.invoke();
+        ChangeSalesPriceUseCase changeSalesPriceUseCase = new ChangeSalesPriceUseCase(bookRepository);
+        changeSalesPriceUseCase.changeSalesPrice(1, BigDecimal.valueOf(35.0));
     }
 
     private void when_a_sales_price_change_is_requested_for_a_book_we_do_not_have() {
-        ChangeSalesPriceUseCase changeSalesPriceUseCase = new ChangeSalesPriceUseCase(0, BigDecimal.valueOf(35.0), bookRepository);
-        changeSalesPriceUseCase.invoke();
+        ChangeSalesPriceUseCase changeSalesPriceUseCase = new ChangeSalesPriceUseCase(bookRepository);
+        changeSalesPriceUseCase.changeSalesPrice(0, BigDecimal.valueOf(35.0));
     }
 
     private void then_the_sales_price_is_changed() {
