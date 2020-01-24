@@ -20,6 +20,7 @@
 
     <modules>
         <module>bookstore-service-domain</module>
+        <module>bookstore-service-data</module>
         <module>bookstore-service-rest-api</module>
     </modules>
 
