@@ -60,11 +60,11 @@ public class BookPricesCalculationTest {
     }
 
     private void then_the_calculated_sales_price_is(BigDecimal expectedSalesPrice) {
-        MatcherAssert.assertThat(salesPrice, CoreMatchers.is(expectedSalesPrice));
+        assertThat(salesPrice, is(expectedSalesPrice));
     }
 
     private void then_the_calculated_offer_price_is(BigDecimal expectedOfferPrice) {
-        MatcherAssert.assertThat(offerPrice, CoreMatchers.is(expectedOfferPrice));
+        assertThat(offerPrice, is(expectedOfferPrice));
     }
 
     private Genre getGenre() {

@@ -21,12 +21,6 @@ public class AuthorData {
     @Column
     private String lastName;
 
-    public AuthorData(String firstName, String middleName, String lastName) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-    }
-
     public int getId() {
         return id;
     }
