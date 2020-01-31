@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.CoreMatchers.is;
 
-public class BookRetrievalUseCasesTest {
+public class BookRetrievalInteractorsTest {
 
     private BookRepository bookRepository;
     private List<Book> bookInventory = getBookInventory();
