@@ -2,7 +2,7 @@ package com.improving.bookstore;
 
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.repositories.AuthorRepository;
-import com.improving.bookstore.usecases.RetrieveAllAuthorsInteractor;
+import com.improving.bookstore.interactors.RetrieveAllAuthorsInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

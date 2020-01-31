@@ -2,7 +2,7 @@ package com.improving.bookstore;
 
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.GenreRepository;
-import com.improving.bookstore.usecases.RetrieveAllGenresInteractor;
+import com.improving.bookstore.interactors.RetrieveAllGenresInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

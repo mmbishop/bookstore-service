@@ -7,8 +7,8 @@ import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.repositories.GenreRepository;
-import com.improving.bookstore.usecases.PurchaseBookInteractor;
-import com.improving.bookstore.usecases.UnwantedGenreException;
+import com.improving.bookstore.interactors.PurchaseBookInteractor;
+import com.improving.bookstore.interactors.UnwantedGenreException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

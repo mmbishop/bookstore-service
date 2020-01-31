@@ -1,4 +1,4 @@
-package com.improving.bookstore.usecases;
+package com.improving.bookstore.interactors;
 
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.repositories.AuthorRepository;

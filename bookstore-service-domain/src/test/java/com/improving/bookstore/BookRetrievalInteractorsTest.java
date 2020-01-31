@@ -4,10 +4,10 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.BookRepository;
-import com.improving.bookstore.usecases.RetrieveAllBooksInteractor;
-import com.improving.bookstore.usecases.RetrieveBooksByAuthorInteractor;
-import com.improving.bookstore.usecases.RetrieveBooksByGenreInteractor;
-import com.improving.bookstore.usecases.RetrieveBooksByTitleInteractor;
+import com.improving.bookstore.interactors.RetrieveAllBooksInteractor;
+import com.improving.bookstore.interactors.RetrieveBooksByAuthorInteractor;
+import com.improving.bookstore.interactors.RetrieveBooksByGenreInteractor;
+import com.improving.bookstore.interactors.RetrieveBooksByTitleInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

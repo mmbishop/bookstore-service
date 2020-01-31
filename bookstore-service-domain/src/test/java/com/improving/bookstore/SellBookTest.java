@@ -3,8 +3,8 @@ package com.improving.bookstore;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.repositories.BookRepository;
-import com.improving.bookstore.usecases.BookNotFoundException;
-import com.improving.bookstore.usecases.SellBookInteractor;
+import com.improving.bookstore.interactors.BookNotFoundException;
+import com.improving.bookstore.interactors.SellBookInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
