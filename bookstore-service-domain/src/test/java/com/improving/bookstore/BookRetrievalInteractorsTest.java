@@ -59,12 +59,12 @@ public class BookRetrievalInteractorsTest {
 
     private void when_all_books_are_requested() {
         when(bookRepository.getAllBooks()).thenReturn(bookInventory);
-        bookList = new RetrieveAllBooksInteractor(bookRepository).invoke();
+        bookList = new RetrieveAllBooksInteractor(bookRepository).retrieveAllBooks();
     }
 
     private void when_a_book_is_requested_by_title() {
         when(bookRepository.getBooksByTitle("Foundation")).thenReturn(List.of(getBook("Foundation")));
-        bookList = new RetrieveBooksByTitleInteractor("Foundation", bookRepository).invoke();
+        bookList = new RetrieveBooksByTitleInteractor(bookRepository).retrieveBooksByTitle("Foundation");
     }
 
     private void when_all_books_are_requested_by_author() {
@@ -73,7 +73,7 @@ public class BookRetrievalInteractorsTest {
                 getBook("Foundation"),
                 getBook("Foundation and Empire")
         ));
-        bookList = new RetrieveBooksByAuthorInteractor(isaacAsimov, bookRepository).invoke();
+        bookList = new RetrieveBooksByAuthorInteractor(bookRepository).retrieveBooksByAuthor(isaacAsimov);
     }
 
     private void when_all_books_are_requested_by_genre() {
@@ -82,7 +82,7 @@ public class BookRetrievalInteractorsTest {
                 getBook("Foundation and Empire"),
                 getBook("Fahrenheit 451")
         ));
-        bookList = new RetrieveBooksByGenreInteractor("Science Fiction", bookRepository).invoke();
+        bookList = new RetrieveBooksByGenreInteractor(bookRepository).retrieveBooksByGenre("Science Fiction");
     }
 
     private void then_all_books_are_retrieved() {

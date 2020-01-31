@@ -5,7 +5,7 @@ import com.improving.bookstore.repositories.BookRepository;
 
 import java.util.List;
 
-public class RetrieveAllBooksInteractor implements EntityRetrievalInteractor<Book> {
+public class RetrieveAllBooksInteractor {
 
     private BookRepository bookRepository;
 
@@ -13,7 +13,7 @@ public class RetrieveAllBooksInteractor implements EntityRetrievalInteractor<Boo
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> invoke() {
+    public List<Book> retrieveAllBooks() {
         return bookRepository.getAllBooks();
     }
 

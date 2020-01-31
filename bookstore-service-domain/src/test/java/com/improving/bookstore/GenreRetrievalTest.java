@@ -31,7 +31,7 @@ public class GenreRetrievalTest {
 
     private void when_all_genres_are_requested() {
         when(genreRepository.getAllGenres()).thenReturn(getAllGenres());
-        genreList = new RetrieveAllGenresInteractor(genreRepository).invoke();
+        genreList = new RetrieveAllGenresInteractor(genreRepository).retrieveAllGenres();
     }
 
     private void then_all_genres_are_retrieved() {

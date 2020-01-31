@@ -31,7 +31,7 @@ public class AuthorRetrievalTest {
 
     private void when_all_authors_are_requested() {
         when(authorRepository.getAllAuthors()).thenReturn(allAuthors);
-        authorList = new RetrieveAllAuthorsInteractor(authorRepository).invoke();
+        authorList = new RetrieveAllAuthorsInteractor(authorRepository).retrieveAllAuthors();
     }
 
     private void then_all_authors_are_retrieved() {

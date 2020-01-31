@@ -5,17 +5,15 @@ import com.improving.bookstore.repositories.BookRepository;
 
 import java.util.List;
 
-public class RetrieveBooksByGenreInteractor implements EntityRetrievalInteractor<Book> {
+public class RetrieveBooksByGenreInteractor {
 
     private BookRepository bookRepository;
-    private String genreName;
 
-    public RetrieveBooksByGenreInteractor(String genreName, BookRepository bookRepository) {
-        this.genreName = genreName;
+    public RetrieveBooksByGenreInteractor(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> invoke() {
+    public List<Book> retrieveBooksByGenre(String genreName) {
         return bookRepository.getBooksByGenre(genreName);
     }
 

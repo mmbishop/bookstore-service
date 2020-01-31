@@ -5,7 +5,7 @@ import com.improving.bookstore.repositories.GenreRepository;
 
 import java.util.List;
 
-public class RetrieveAllGenresInteractor implements EntityRetrievalInteractor<Genre> {
+public class RetrieveAllGenresInteractor {
 
     private GenreRepository genreRepository;
 
@@ -13,7 +13,7 @@ public class RetrieveAllGenresInteractor implements EntityRetrievalInteractor<Ge
         this.genreRepository = genreRepository;
     }
 
-    public List<Genre> invoke() {
+    public List<Genre> retrieveAllGenres() {
         return genreRepository.getAllGenres();
     }
 

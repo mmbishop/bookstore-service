@@ -6,17 +6,15 @@ import com.improving.bookstore.repositories.BookRepository;
 
 import java.util.List;
 
-public class RetrieveBooksByAuthorInteractor implements EntityRetrievalInteractor<Book> {
+public class RetrieveBooksByAuthorInteractor {
 
-    private Author author;
     private BookRepository bookRepository;
 
-    public RetrieveBooksByAuthorInteractor(Author author, BookRepository bookRepository) {
-        this.author = author;
+    public RetrieveBooksByAuthorInteractor(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> invoke() {
+    public List<Book> retrieveBooksByAuthor(Author author) {
         return bookRepository.getBooksByAuthor(author);
     }
 
