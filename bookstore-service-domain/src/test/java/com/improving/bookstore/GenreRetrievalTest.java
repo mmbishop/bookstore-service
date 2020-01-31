@@ -2,7 +2,7 @@ package com.improving.bookstore;
 
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.GenreRepository;
-import com.improving.bookstore.usecases.RetrieveAllGenresUseCase;
+import com.improving.bookstore.usecases.RetrieveAllGenresInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -31,7 +31,7 @@ public class GenreRetrievalTest {
 
     private void when_all_genres_are_requested() {
         when(genreRepository.getAllGenres()).thenReturn(getAllGenres());
-        genreList = new RetrieveAllGenresUseCase(genreRepository).invoke();
+        genreList = new RetrieveAllGenresInteractor(genreRepository).invoke();
     }
 
     private void then_all_genres_are_retrieved() {

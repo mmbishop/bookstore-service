@@ -3,11 +3,11 @@ package com.improving.bookstore.usecases;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.GenreRepository;
 
-public class AddGenreUseCase {
+public class AddGenreInteractor {
 
     private GenreRepository genreRepository;
 
-    public AddGenreUseCase(GenreRepository genreRepository) {
+    public AddGenreInteractor(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }
 

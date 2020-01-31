@@ -5,18 +5,18 @@ import com.improving.bookstore.repositories.BookRepository;
 
 import java.util.List;
 
-public class RetrieveBooksByGenreUseCase implements EntityRetrievalUseCase<Book> {
+public class RetrieveBooksByTitleInteractor implements EntityRetrievalInteractor<Book> {
 
     private BookRepository bookRepository;
-    private String genreName;
+    private String title;
 
-    public RetrieveBooksByGenreUseCase(String genreName, BookRepository bookRepository) {
-        this.genreName = genreName;
+    public RetrieveBooksByTitleInteractor(String title, BookRepository bookRepository) {
+        this.title = title;
         this.bookRepository = bookRepository;
     }
 
     public List<Book> invoke() {
-        return bookRepository.getBooksByGenre(genreName);
+        return bookRepository.getBooksByTitle(title);
     }
 
 }

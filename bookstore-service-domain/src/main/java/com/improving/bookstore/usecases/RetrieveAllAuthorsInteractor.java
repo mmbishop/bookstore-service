@@ -5,11 +5,11 @@ import com.improving.bookstore.repositories.AuthorRepository;
 
 import java.util.List;
 
-public class RetrieveAllAuthorsUseCase implements EntityRetrievalUseCase<Author> {
+public class RetrieveAllAuthorsInteractor implements EntityRetrievalInteractor<Author> {
 
     private AuthorRepository authorRepository;
 
-    public RetrieveAllAuthorsUseCase(AuthorRepository authorRepository) {
+    public RetrieveAllAuthorsInteractor(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
 

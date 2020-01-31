@@ -2,7 +2,7 @@ package com.improving.bookstore;
 
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.GenreRepository;
-import com.improving.bookstore.usecases.AddGenreUseCase;
+import com.improving.bookstore.usecases.AddGenreInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -30,7 +30,7 @@ public class AddGenreTest {
     }
 
     private void when_a_request_is_made_to_add_the_genre() {
-        new AddGenreUseCase(genreRepository).addGenre(genre);
+        new AddGenreInteractor(genreRepository).addGenre(genre);
     }
 
     private void then_the_genre_is_added() {

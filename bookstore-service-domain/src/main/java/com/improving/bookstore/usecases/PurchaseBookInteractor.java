@@ -10,14 +10,14 @@ import com.improving.bookstore.repositories.GenreRepository;
 
 import java.util.Optional;
 
-public class PurchaseBookUseCase {
+public class PurchaseBookInteractor {
 
     private AuthorRepository authorRepository;
     private BookRepository bookRepository;
     private GenreRepository genreRepository;
 
-    public PurchaseBookUseCase(BookRepository bookRepository, AuthorRepository authorRepository,
-                               GenreRepository genreRepository) {
+    public PurchaseBookInteractor(BookRepository bookRepository, AuthorRepository authorRepository,
+                                  GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;

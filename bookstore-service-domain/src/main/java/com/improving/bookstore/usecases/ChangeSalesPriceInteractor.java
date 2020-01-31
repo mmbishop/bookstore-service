@@ -6,11 +6,11 @@ import com.improving.bookstore.repositories.BookRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class ChangeSalesPriceUseCase {
+public class ChangeSalesPriceInteractor {
 
     private BookRepository bookRepository;
 
-    public ChangeSalesPriceUseCase(BookRepository bookRepository) {
+    public ChangeSalesPriceInteractor(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 

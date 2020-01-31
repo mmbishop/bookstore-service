@@ -2,7 +2,7 @@ package com.improving.bookstore.usecases;
 
 import java.util.List;
 
-public interface EntityRetrievalUseCase<T> {
+public interface EntityRetrievalInteractor<T> {
 
     List<T> invoke();
 

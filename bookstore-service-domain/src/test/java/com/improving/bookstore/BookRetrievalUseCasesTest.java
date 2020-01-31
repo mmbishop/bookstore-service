@@ -4,10 +4,10 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.BookRepository;
-import com.improving.bookstore.usecases.RetrieveAllBooksUseCase;
-import com.improving.bookstore.usecases.RetrieveBooksByAuthorUseCase;
-import com.improving.bookstore.usecases.RetrieveBooksByGenreUseCase;
-import com.improving.bookstore.usecases.RetrieveBooksByTitleUseCase;
+import com.improving.bookstore.usecases.RetrieveAllBooksInteractor;
+import com.improving.bookstore.usecases.RetrieveBooksByAuthorInteractor;
+import com.improving.bookstore.usecases.RetrieveBooksByGenreInteractor;
+import com.improving.bookstore.usecases.RetrieveBooksByTitleInteractor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -59,12 +59,12 @@ public class BookRetrievalUseCasesTest {
 
     private void when_all_books_are_requested() {
         when(bookRepository.getAllBooks()).thenReturn(bookInventory);
-        bookList = new RetrieveAllBooksUseCase(bookRepository).invoke();
+        bookList = new RetrieveAllBooksInteractor(bookRepository).invoke();
     }
 
     private void when_a_book_is_requested_by_title() {
         when(bookRepository.getBooksByTitle("Foundation")).thenReturn(List.of(getBook("Foundation")));
-        bookList = new RetrieveBooksByTitleUseCase("Foundation", bookRepository).invoke();
+        bookList = new RetrieveBooksByTitleInteractor("Foundation", bookRepository).invoke();
     }
 
     private void when_all_books_are_requested_by_author() {
@@ -73,7 +73,7 @@ public class BookRetrievalUseCasesTest {
                 getBook("Foundation"),
                 getBook("Foundation and Empire")
         ));
-        bookList = new RetrieveBooksByAuthorUseCase(isaacAsimov, bookRepository).invoke();
+        bookList = new RetrieveBooksByAuthorInteractor(isaacAsimov, bookRepository).invoke();
     }
 
     private void when_all_books_are_requested_by_genre() {
@@ -82,7 +82,7 @@ public class BookRetrievalUseCasesTest {
                 getBook("Foundation and Empire"),
                 getBook("Fahrenheit 451")
         ));
-        bookList = new RetrieveBooksByGenreUseCase("Science Fiction", bookRepository).invoke();
+        bookList = new RetrieveBooksByGenreInteractor("Science Fiction", bookRepository).invoke();
     }
 
     private void then_all_books_are_retrieved() {

@@ -5,11 +5,11 @@ import com.improving.bookstore.repositories.BookRepository;
 
 import java.util.Optional;
 
-public class SellBookUseCase {
+public class SellBookInteractor {
 
     private BookRepository bookRepository;
 
-    public SellBookUseCase(BookRepository bookRepository) {
+    public SellBookInteractor(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 

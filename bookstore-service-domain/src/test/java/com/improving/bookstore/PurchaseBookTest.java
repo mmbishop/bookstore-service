@@ -7,7 +7,7 @@ import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.repositories.GenreRepository;
-import com.improving.bookstore.usecases.PurchaseBookUseCase;
+import com.improving.bookstore.usecases.PurchaseBookInteractor;
 import com.improving.bookstore.usecases.UnwantedGenreException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -98,8 +98,8 @@ public class PurchaseBookTest {
     }
 
     private void when_the_book_is_sold_to_the_bookstore_for_genre(String genreName) {
-        PurchaseBookUseCase purchaseBookUseCase = new PurchaseBookUseCase(bookRepository, authorRepository, genreRepository);
-        offer = purchaseBookUseCase.purchaseBook(book, genreName);
+        PurchaseBookInteractor purchaseBookInteractor = new PurchaseBookInteractor(bookRepository, authorRepository, genreRepository);
+        offer = purchaseBookInteractor.purchaseBook(book, genreName);
     }
 
     private void then_an_offer_is_generated() {
