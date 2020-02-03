@@ -13,10 +13,11 @@ public class SellBookInteractor {
         this.bookRepository = bookRepository;
     }
 
-    public void sellBook(int bookId) {
+    public Book sellBook(int bookId) {
         Optional<Book> book = bookRepository.getBookById(bookId);
         if (book.isPresent()) {
             bookRepository.deleteBook(book.get());
+            return book.get();
         }
         else {
             throw new BookNotFoundException("No book found for ID " + bookId);

@@ -50,8 +50,8 @@ public class BookstoreService {
         changeSalesPriceInteractor.changeSalesPrice(bookId, newSalesPrice);
     }
 
-    public void sellBook(int bookId) {
-        sellBookInteractor.sellBook(bookId);
+    public Book sellBook(int bookId) {
+        return sellBookInteractor.sellBook(bookId);
     }
 
     public List<Genre> getAllGenres() {
