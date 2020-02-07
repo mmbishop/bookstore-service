@@ -3,20 +3,16 @@ package com.improving.bookstore.repositories;
 import com.improving.bookstore.mappers.AuthorMapper;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.AuthorData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
 
     private AuthorDataSource dataSource;
     private AuthorMapper authorMapper;
 
-    @Autowired
     public AuthorRepositoryImpl(AuthorDataSource dataSource, AuthorMapper authorMapper) {
         this.dataSource = dataSource;
         this.authorMapper = authorMapper;
@@ -42,9 +38,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public List<Author> getAllAuthors() {
         List<Author> authorList = new LinkedList<>();
-        dataSource.findAll().forEach(author -> {
-            authorList.add(authorMapper.mapFrom(author));
-        });
+        dataSource.findAll().forEach(author -> authorList.add(authorMapper.mapFrom(author)));
         return authorList;
     }
 

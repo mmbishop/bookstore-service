@@ -2,9 +2,11 @@ package com.improving.bookstore.repositories;
 
 import com.improving.bookstore.model.*;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface BookDataSource extends CrudRepository<BookData, Integer> {
 
     Iterable<BookData> findAll();

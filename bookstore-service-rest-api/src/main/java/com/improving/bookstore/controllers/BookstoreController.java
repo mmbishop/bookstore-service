@@ -6,6 +6,7 @@ import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.services.BookstoreService;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -13,7 +14,8 @@ import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Path("/bookstore")
+@RestController
+@RequestMapping("bookstore")
 public class BookstoreController {
 
     private BookstoreService bookstoreService;
@@ -22,30 +24,22 @@ public class BookstoreController {
         this.bookstoreService = bookstoreService;
     }
 
-    @GET
-    @Path("/books")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/books", produces = MediaType.APPLICATION_JSON)
     public Response getAllBooks() {
         return Response.ok().entity(bookstoreService.getAllBooks()).build();
     }
 
-    @GET
-    @Path("/authors")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/authors", produces = MediaType.APPLICATION_JSON)
     public Response getAllAuthors() {
         return Response.ok().entity(bookstoreService.getAllAuthors()).build();
     }
 
-    @GET
-    @Path("/genres")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/genres", produces = MediaType.APPLICATION_JSON)
     public Response getAllGenres() {
         return Response.ok().entity(bookstoreService.getAllGenres()).build();
     }
 
-    @GET
-    @Path("/books")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/booksbytitle", produces = MediaType.APPLICATION_JSON)
     public Response getBooksByTitle(@QueryParam("title") String title) {
         List<Book> booksByTitle = bookstoreService.getBooksByTitle(title);
         if (booksByTitle.isEmpty()) {
@@ -54,9 +48,7 @@ public class BookstoreController {
         return Response.ok().entity(booksByTitle).build();
     }
 
-    @GET
-    @Path("/books")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/booksbyauthor", produces = MediaType.APPLICATION_JSON)
     public Response getBooksByAuthor(@QueryParam("authorFirstName") String authorFirstName, @QueryParam("authorMiddleName") String authorMiddleName,
                                        @QueryParam("authorLastName") String authorLastName) {
         List<Book> booksByAuthor = bookstoreService.getBooksByAuthor(new Author(authorFirstName, authorMiddleName, authorLastName));
@@ -66,9 +58,7 @@ public class BookstoreController {
         return Response.ok().entity(booksByAuthor).build();
     }
 
-    @GET
-    @Path("/books")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/booksbygenre", produces = MediaType.APPLICATION_JSON)
     public Response getBooksByGenre(@QueryParam("genre") String genreName) {
         List<Book> booksByGenre = bookstoreService.getBooksByGenre(genreName);
         if (booksByGenre.isEmpty()) {
@@ -77,35 +67,26 @@ public class BookstoreController {
         return Response.ok().entity(booksByGenre).build();
     }
 
-    @POST
-    @Path("/genre")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(path = "/genre", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public Response addGenre(Genre genre) {
         bookstoreService.addGenre(genre);
         return Response.ok().entity(genre).build();
     }
 
-    @PUT
-    @Path("/books/{bookId}")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response changeSalesPrice(@PathParam("bookId") int bookId, BigDecimal newPrice) {
+    @PutMapping(path = "/books/{bookId}", consumes = MediaType.APPLICATION_JSON)
+    public Response changeSalesPrice(@PathVariable("bookId") int bookId, BigDecimal newPrice) {
         bookstoreService.changeSalesPrice(bookId, newPrice);
         return Response.ok().build();
     }
 
-    @POST
-    @Path("/books")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping(path = "/books", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public Response purchaseBook(PurchaseBookRequest purchaseBookRequest) {
         BookPurchaseInvoice invoice = bookstoreService.purchaseBook(getBookFromPurchaseRequest(purchaseBookRequest), purchaseBookRequest.getGenre());
         return Response.ok().entity(invoice).build();
     }
 
-    @POST
-    @Path("/books/{bookId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response sellBook(@PathParam("bookId") int bookId) {
+    @PostMapping(path = "/books/{bookId}", produces = MediaType.APPLICATION_JSON)
+    public Response sellBook(@PathVariable("bookId") int bookId) {
         Book soldBook = bookstoreService.sellBook(bookId);
         return Response.ok().entity(soldBook).build();
     }

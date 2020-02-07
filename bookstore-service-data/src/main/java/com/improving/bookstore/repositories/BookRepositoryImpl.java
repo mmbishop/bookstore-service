@@ -11,14 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public class BookRepositoryImpl implements BookRepository {
 
     private AuthorMapper authorMapper;
     private BookDataSource dataSource;
     private BookMapper bookMapper;
 
-    @Autowired
     public BookRepositoryImpl(BookDataSource dataSource, BookMapper bookMapper, AuthorMapper authorMapper) {
         this.dataSource = dataSource;
         this.bookMapper = bookMapper;
@@ -28,9 +26,7 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getAllBooks() {
         List<Book> bookList = new LinkedList<>();
-        dataSource.findAll().forEach(book -> {
-            bookList.add(bookMapper.mapFrom(book));
-        });
+        dataSource.findAll().forEach(book -> bookList.add(bookMapper.mapFrom(book)));
         return bookList;
     }
 
@@ -42,27 +38,21 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getBooksByTitle(String title) {
         List<Book> bookList = new LinkedList<>();
-        dataSource.findByTitle(title).forEach(book -> {
-            bookList.add(bookMapper.mapFrom(book));
-        });
+        dataSource.findByTitle(title).forEach(book -> bookList.add(bookMapper.mapFrom(book)));
         return bookList;
     }
 
     @Override
     public List<Book> getBooksByAuthor(Author author) {
         List<Book> bookList = new LinkedList<>();
-        dataSource.findByAuthor(authorMapper.mapFrom(author)).forEach(book -> {
-            bookList.add(bookMapper.mapFrom(book));
-        });
+        dataSource.findByAuthor(authorMapper.mapFrom(author)).forEach(book -> bookList.add(bookMapper.mapFrom(book)));
         return bookList;
     }
 
     @Override
     public List<Book> getBooksByGenre(String genreName) {
         List<Book> bookList = new LinkedList<>();
-        dataSource.findByGenreName(genreName).forEach(book -> {
-            bookList.add(bookMapper.mapFrom(book));
-        });
+        dataSource.findByGenreName(genreName).forEach(book -> bookList.add(bookMapper.mapFrom(book)));
         return bookList;
     }
 

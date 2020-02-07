@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <context:component-scan base-package="com.improving.bookstore"/>
+
+    <jpa:repositories base-package="com.improving.bookstore.repositories"/>
+
+    <bean id="addGenreInteractor" class="com.improving.bookstore.interactors.AddGenreInteractor">
+        <constructor-arg ref="genreRepository"/>
+    </bean>
+
+    <bean id="changeSalesPriceInteractor" class="com.improving.bookstore.interactors.ChangeSalesPriceInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="purchaseBookInteractor" class="com.improving.bookstore.interactors.PurchaseBookInteractor">
+        <constructor-arg index="0" ref="bookRepository"/>
+        <constructor-arg index="1" ref="authorRepository"/>
+        <constructor-arg index="2" ref="genreRepository"/>
+    </bean>
+
+    <bean id="retrieveAllAuthorsInteractor" class="com.improving.bookstore.interactors.RetrieveAllAuthorsInteractor">
+        <constructor-arg ref="authorRepository"/>
+    </bean>
+
+    <bean id="retrieveAllBooksInteractor" class="com.improving.bookstore.interactors.RetrieveAllBooksInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="retrieveAllGenresInteractor" class="com.improving.bookstore.interactors.RetrieveAllGenresInteractor">
+        <constructor-arg ref="genreRepository"/>
+    </bean>
+
+    <bean id="retrieveBooksByAuthorInteractor" class="com.improving.bookstore.interactors.RetrieveBooksByAuthorInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="retrieveBooksByGenreInteractor" class="com.improving.bookstore.interactors.RetrieveBooksByGenreInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="retrieveBooksByTitleInteractor" class="com.improving.bookstore.interactors.RetrieveBooksByTitleInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="sellBooksInteractor" class="com.improving.bookstore.interactors.SellBookInteractor">
+        <constructor-arg ref="bookRepository"/>
+    </bean>
+
+    <bean id="authorRepository" class="com.improving.bookstore.repositories.AuthorRepositoryImpl">
+        <constructor-arg index="0" ref="authorDataSource"/>
+        <constructor-arg index="1" ref="authorMapper"/>
+    </bean>
+
+    <bean id="bookRepository" class="com.improving.bookstore.repositories.BookRepositoryImpl">
+        <constructor-arg index="0" ref="bookDataSource"/>
+        <constructor-arg index="1" ref="bookMapper"/>
+        <constructor-arg index="2" ref="authorMapper"/>
+    </bean>
+
+    <bean id="genreRepository" class="com.improving.bookstore.repositories.GenreRepositoryImpl">
+        <constructor-arg index="0" ref="genreDataSource"/>
+        <constructor-arg index="1" ref="genreMapper"/>
+    </bean>
+
+    <bean id="bookMapper" class="com.improving.bookstore.mappers.BookMapper">
+        <constructor-arg index="0" ref="authorMapper"/>
+        <constructor-arg index="1" ref="genreMapper"/>
+    </bean>
+
+    <bean id="authorMapper" class="com.improving.bookstore.mappers.AuthorMapper"/>
+
+    <bean id="genreMapper" class="com.improving.bookstore.mappers.GenreMapper"/>
+
+    <bean id="bookstoreController" class="com.improving.bookstore.controllers.BookstoreController">
+        <constructor-arg ref="bookstoreService"/>
+    </bean>
+
+    <bean id="bookstoreService" class="com.improving.bookstore.services.BookstoreService">
+        <property name="retrieveAllAuthorsInteractor" ref="retrieveAllAuthorsInteractor"/>
+        <property name="retrieveAllBooksInteractor" ref="retrieveAllBooksInteractor"/>
+        <property name="retrieveAllGenresInteractor" ref="retrieveAllGenresInteractor"/>
+        <property name="retrieveBooksByAuthorInteractor" ref="retrieveBooksByAuthorInteractor"/>
+        <property name="retrieveBooksByGenreInteractor" ref="retrieveBooksByGenreInteractor"/>
+        <property name="retrieveBooksByTitleInteractor" ref="retrieveBooksByTitleInteractor"/>
+        <property name="addGenreInteractor" ref="addGenreInteractor"/>
+        <property name="changeSalesPriceInteractor" ref="changeSalesPriceInteractor"/>
+        <property name="purchaseBookInteractor" ref="purchaseBookInteractor"/>
+        <property name="sellBookInteractor" ref="sellBooksInteractor"/>
+    </bean>
+
+</beans>
