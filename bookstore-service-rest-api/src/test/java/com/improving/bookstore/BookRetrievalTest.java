@@ -90,7 +90,7 @@ public class BookRetrievalTest {
 
     private void when_books_are_retrieved_by_author() {
         when(retrieveBooksByAuthorInteractor.retrieveBooksByAuthor(getAuthorKimStanleyRobinson())).thenReturn(Collections.singletonList(getRedMarsBook()));
-        bookList = bookstoreService.getBooksByAuthor(getAuthorKimStanleyRobinson());
+        bookList = bookstoreService.getBooksByAuthor("Kim", "Stanley", "Robinson");
     }
 
     private void when_books_are_retrieved_by_genre() {

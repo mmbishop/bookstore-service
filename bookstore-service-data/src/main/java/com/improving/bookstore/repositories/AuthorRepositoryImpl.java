@@ -19,8 +19,8 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public void addAuthor(Author author) {
-        dataSource.save(authorMapper.mapFrom(author));
+    public Author addAuthor(Author author) {
+        return authorMapper.mapFrom(dataSource.save(authorMapper.mapFrom(author)));
     }
 
     @Override

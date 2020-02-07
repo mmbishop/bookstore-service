@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public final class Author {
 
+    private int id;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -16,6 +17,17 @@ public final class Author {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+    }
+
+    public Author(int id, String firstName, String middleName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {

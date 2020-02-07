@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AuthorRepository {
 
-    void addAuthor(Author author);
+    Author addAuthor(Author author);
 
     Optional<Author> getAuthorByExample(Author author);
 

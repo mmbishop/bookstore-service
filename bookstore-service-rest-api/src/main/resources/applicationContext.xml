@@ -76,10 +76,6 @@
 
     <bean id="genreMapper" class="com.improving.bookstore.mappers.GenreMapper"/>
 
-    <bean id="bookstoreController" class="com.improving.bookstore.controllers.BookstoreController">
-        <constructor-arg ref="bookstoreService"/>
-    </bean>
-
     <bean id="bookstoreService" class="com.improving.bookstore.services.BookstoreService">
         <property name="retrieveAllAuthorsInteractor" ref="retrieveAllAuthorsInteractor"/>
         <property name="retrieveAllBooksInteractor" ref="retrieveAllBooksInteractor"/>

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class BookData {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column

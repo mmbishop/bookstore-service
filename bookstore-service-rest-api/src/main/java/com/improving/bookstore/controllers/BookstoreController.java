@@ -1,16 +1,18 @@
 package com.improving.bookstore.controllers;
 
 import com.improving.bookstore.dto.PurchaseBookRequest;
+import com.improving.bookstore.dto.PurchaseBookResponse;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.services.BookstoreService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -25,70 +27,70 @@ public class BookstoreController {
     }
 
     @GetMapping(path = "/books", produces = MediaType.APPLICATION_JSON)
-    public Response getAllBooks() {
-        return Response.ok().entity(bookstoreService.getAllBooks()).build();
+    public ResponseEntity<List<Book>> getAllBooks() {
+        return ResponseEntity.ok(bookstoreService.getAllBooks());
     }
 
     @GetMapping(path = "/authors", produces = MediaType.APPLICATION_JSON)
-    public Response getAllAuthors() {
-        return Response.ok().entity(bookstoreService.getAllAuthors()).build();
+    public ResponseEntity<List<Author>> getAllAuthors() {
+        return ResponseEntity.ok(bookstoreService.getAllAuthors());
     }
 
     @GetMapping(path = "/genres", produces = MediaType.APPLICATION_JSON)
-    public Response getAllGenres() {
-        return Response.ok().entity(bookstoreService.getAllGenres()).build();
+    public ResponseEntity<List<Genre>> getAllGenres() {
+        return ResponseEntity.ok(bookstoreService.getAllGenres());
     }
 
     @GetMapping(path = "/booksbytitle", produces = MediaType.APPLICATION_JSON)
-    public Response getBooksByTitle(@QueryParam("title") String title) {
+    public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam("title") String title) {
         List<Book> booksByTitle = bookstoreService.getBooksByTitle(title);
         if (booksByTitle.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return Response.ok().entity(booksByTitle).build();
+        return ResponseEntity.ok(booksByTitle);
     }
 
     @GetMapping(path = "/booksbyauthor", produces = MediaType.APPLICATION_JSON)
-    public Response getBooksByAuthor(@QueryParam("authorFirstName") String authorFirstName, @QueryParam("authorMiddleName") String authorMiddleName,
-                                       @QueryParam("authorLastName") String authorLastName) {
-        List<Book> booksByAuthor = bookstoreService.getBooksByAuthor(new Author(authorFirstName, authorMiddleName, authorLastName));
+    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam("firstName") String authorFirstName, @RequestParam("middleName") String authorMiddleName,
+                                       @RequestParam("lastName") String authorLastName) {
+        List<Book> booksByAuthor = bookstoreService.getBooksByAuthor(authorFirstName, authorMiddleName.length() > 0 ? authorMiddleName : null, authorLastName);
         if (booksByAuthor.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return Response.ok().entity(booksByAuthor).build();
+        return ResponseEntity.ok(booksByAuthor);
     }
 
     @GetMapping(path = "/booksbygenre", produces = MediaType.APPLICATION_JSON)
-    public Response getBooksByGenre(@QueryParam("genre") String genreName) {
+    public ResponseEntity<List<Book>> getBooksByGenre(@RequestParam("genre") String genreName) {
         List<Book> booksByGenre = bookstoreService.getBooksByGenre(genreName);
         if (booksByGenre.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return Response.ok().entity(booksByGenre).build();
+        return ResponseEntity.ok(booksByGenre);
     }
 
     @PostMapping(path = "/genre", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    public Response addGenre(Genre genre) {
+    public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
         bookstoreService.addGenre(genre);
-        return Response.ok().entity(genre).build();
+        return ResponseEntity.ok(genre);
     }
 
     @PutMapping(path = "/books/{bookId}", consumes = MediaType.APPLICATION_JSON)
-    public Response changeSalesPrice(@PathVariable("bookId") int bookId, BigDecimal newPrice) {
-        bookstoreService.changeSalesPrice(bookId, newPrice);
-        return Response.ok().build();
+    public ResponseEntity<?> changeSalesPrice(@PathVariable("bookId") int bookId, @RequestBody Book book) {
+        bookstoreService.changeSalesPrice(bookId, book.getPrice());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/books", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
-    public Response purchaseBook(PurchaseBookRequest purchaseBookRequest) {
+    public ResponseEntity<PurchaseBookResponse> purchaseBook(@RequestBody PurchaseBookRequest purchaseBookRequest) {
         BookPurchaseInvoice invoice = bookstoreService.purchaseBook(getBookFromPurchaseRequest(purchaseBookRequest), purchaseBookRequest.getGenre());
-        return Response.ok().entity(invoice).build();
+        return ResponseEntity.ok(new PurchaseBookResponse(invoice));
     }
 
     @PostMapping(path = "/books/{bookId}", produces = MediaType.APPLICATION_JSON)
-    public Response sellBook(@PathVariable("bookId") int bookId) {
+    public ResponseEntity<Book> sellBook(@PathVariable("bookId") int bookId) {
         Book soldBook = bookstoreService.sellBook(bookId);
-        return Response.ok().entity(soldBook).build();
+        return ResponseEntity.ok(soldBook);
     }
 
     private Book getBookFromPurchaseRequest(PurchaseBookRequest purchaseBookRequest) {

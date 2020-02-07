@@ -2,16 +2,12 @@ package com.improving.bookstore.mappers;
 
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class BookMapper {
 
     private AuthorMapper authorMapper;
     private GenreMapper genreMapper;
 
-    @Autowired
     public BookMapper(AuthorMapper authorMapper, GenreMapper genreMapper) {
         this.authorMapper = authorMapper;
         this.genreMapper = genreMapper;

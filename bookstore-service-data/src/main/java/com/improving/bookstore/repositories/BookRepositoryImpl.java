@@ -4,8 +4,6 @@ import com.improving.bookstore.mappers.AuthorMapper;
 import com.improving.bookstore.mappers.BookMapper;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;

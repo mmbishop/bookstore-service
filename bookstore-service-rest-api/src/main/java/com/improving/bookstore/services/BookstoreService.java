@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Service
 public class BookstoreService {
 
     private AddGenreInteractor addGenreInteractor;
@@ -28,8 +27,8 @@ public class BookstoreService {
         return retrieveAllBooksInteractor.retrieveAllBooks();
     }
 
-    public List<Book> getBooksByAuthor(Author author) {
-        return retrieveBooksByAuthorInteractor.retrieveBooksByAuthor(author);
+    public List<Book> getBooksByAuthor(String firstName, String middleName, String lastName) {
+        return retrieveBooksByAuthorInteractor.retrieveBooksByAuthor(new Author(firstName, middleName, lastName));
     }
 
     public List<Book> getBooksByGenre(String genreName) {

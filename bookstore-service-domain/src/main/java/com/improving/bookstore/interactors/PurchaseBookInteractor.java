@@ -27,18 +27,20 @@ public class PurchaseBookInteractor {
         Optional<Genre> genre = genreRepository.getGenreByName(genreName);
         if (genre.isPresent()) {
             book.setGenre(genre.get());
-            addAuthorIfNotAlreadyInTheRepository(book.getAuthor());
+            Author author = addAuthorIfNotAlreadyInTheRepository(book.getAuthor());
+            book.setAuthor(author);
             bookRepository.addBook(book);
             return new BookPurchaseInvoice(book);
         }
         throw new UnwantedGenreException("Bookstore does not want books of genre " + genreName);
     }
 
-    private void addAuthorIfNotAlreadyInTheRepository(Author bookAuthor) {
+    private Author addAuthorIfNotAlreadyInTheRepository(Author bookAuthor) {
         Optional<Author> author = authorRepository.getAuthorByExample(bookAuthor);
         if (author.isEmpty()) {
-            authorRepository.addAuthor(bookAuthor);
+            author = Optional.of(authorRepository.addAuthor(bookAuthor));
         }
+        return author.get();
     }
 
 }
