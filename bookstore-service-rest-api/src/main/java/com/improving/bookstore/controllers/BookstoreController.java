@@ -1,5 +1,6 @@
 package com.improving.bookstore.controllers;
 
+import com.improving.bookstore.dto.ChangeSalesPriceRequest;
 import com.improving.bookstore.dto.PurchaseBookRequest;
 import com.improving.bookstore.dto.PurchaseBookResponse;
 import com.improving.bookstore.model.Author;
@@ -11,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -76,14 +75,15 @@ public class BookstoreController {
     }
 
     @PutMapping(path = "/books/{bookId}", consumes = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> changeSalesPrice(@PathVariable("bookId") int bookId, @RequestBody Book book) {
-        bookstoreService.changeSalesPrice(bookId, book.getPrice());
+    public ResponseEntity<?> changeSalesPrice(@PathVariable("bookId") int bookId, @RequestBody ChangeSalesPriceRequest changeSalesPriceRequest) {
+        bookstoreService.changeSalesPrice(bookId, changeSalesPriceRequest.getNewPrice());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/books", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<PurchaseBookResponse> purchaseBook(@RequestBody PurchaseBookRequest purchaseBookRequest) {
-        BookPurchaseInvoice invoice = bookstoreService.purchaseBook(getBookFromPurchaseRequest(purchaseBookRequest), purchaseBookRequest.getGenre());
+        BookPurchaseInvoice invoice = bookstoreService.purchaseBook(getBookFromPurchaseRequest(purchaseBookRequest),
+                getAuthorFromPurchaseRequest(purchaseBookRequest), purchaseBookRequest.getGenre());
         return ResponseEntity.ok(new PurchaseBookResponse(invoice));
     }
 
@@ -96,12 +96,15 @@ public class BookstoreController {
     private Book getBookFromPurchaseRequest(PurchaseBookRequest purchaseBookRequest) {
         Book book = new Book();
         book.setTitle(purchaseBookRequest.getTitle());
-        book.setAuthor(new Author(purchaseBookRequest.getAuthorFirstName(), purchaseBookRequest.getAuthorMiddleName(), purchaseBookRequest.getAuthorLastName()));
         book.setPublisher(purchaseBookRequest.getPublisher());
         book.setPublishYear(purchaseBookRequest.getPublishYear());
         book.setIsbn(purchaseBookRequest.getIsbn());
         book.setNumberOfPages(purchaseBookRequest.getNumberOfPages());
         return book;
+    }
+
+    private Author getAuthorFromPurchaseRequest(PurchaseBookRequest purchaseBookRequest) {
+        return new Author(purchaseBookRequest.getAuthorFirstName(), purchaseBookRequest.getAuthorMiddleName(), purchaseBookRequest.getAuthorLastName());
     }
 
 }

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 public class PurchaseBookTest {
 
-    private Author newAuthor;
+    private Author author;
     private AuthorRepository authorRepository;
     private Book book;
     private BookRepository bookRepository;
@@ -35,7 +35,8 @@ public class PurchaseBookTest {
         given_a_book_repository();
         given_a_genre_repository();
         given_an_author_repository();
-        given_a_book_with_author_that_is_in_the_repository();
+        given_an_author("Edgar", "Allan", "Poe");
+        given_a_book_with_title("The Raven");
         when_the_book_is_sold_to_the_bookstore_for_genre("Science Fiction");
         then_an_offer_is_generated();
         then_the_book_is_added_to_the_inventory();
@@ -46,9 +47,9 @@ public class PurchaseBookTest {
         given_a_book_repository();
         given_an_author_repository();
         given_a_genre_repository();
-        given_a_new_author();
-        given_a_book_with_a_new_author();
-        when_the_book_is_sold_to_the_bookstore_for_genre("Science Fiction");
+        given_an_author("An", "Unknown", "Author");
+        given_a_book_with_title("A Title");
+        when_the_book_with_new_author_is_sold_to_the_bookstore();
         then_an_offer_is_generated();
         then_the_author_is_added_to_the_repository();
         then_the_book_is_added_to_the_inventory();
@@ -57,8 +58,10 @@ public class PurchaseBookTest {
     @Test
     void book_is_rejected_when_genre_is_not_one_that_the_bookstore_wants() {
         given_a_book_repository();
+        given_an_author_repository();
         given_a_genre_repository();
-        given_a_book_with_author_that_is_in_the_repository();
+        given_an_author("A", null, "Traveler");
+        given_a_book_with_title("Travel the World");
         assertThrows(UnwantedGenreException.class, () -> {
             when_the_book_is_sold_to_the_bookstore_for_genre("Travel");
         });
@@ -79,27 +82,27 @@ public class PurchaseBookTest {
         when(genreRepository.getGenreByName("Science Fiction")).thenReturn(getScienceFictionGenre());
     }
 
-    private void given_a_book_with_author_that_is_in_the_repository() {
+    private void given_a_book_with_title(String title) {
         book = new Book();
-        book.setTitle("The Raven");
-        book.setAuthor(new Author("Edgar", "Allan", "Poe"));
-        book.setNumberOfPages(300);
+        book.setTitle(title);
+        book.setNumberOfPages(500);
     }
 
-    private void given_a_book_with_a_new_author() {
-        book = new Book();
-        book.setTitle("A Title");
-        book.setAuthor(newAuthor);
-        book.setNumberOfPages(300);
-    }
-
-    private void given_a_new_author() {
-        newAuthor = new Author("An", "Unknown", "Author");
+    private void given_an_author(String firstName, String middleName, String lastName) {
+        author = new Author(firstName, middleName, lastName);
     }
 
     private void when_the_book_is_sold_to_the_bookstore_for_genre(String genreName) {
+        when(authorRepository.getAuthorByExample(author)).thenReturn(Optional.of(author));
         PurchaseBookInteractor purchaseBookInteractor = new PurchaseBookInteractor(bookRepository, authorRepository, genreRepository);
-        offer = purchaseBookInteractor.purchaseBook(book, genreName);
+        offer = purchaseBookInteractor.purchaseBook(book, author, genreName);
+    }
+
+    private void when_the_book_with_new_author_is_sold_to_the_bookstore() {
+        when(authorRepository.getAuthorByExample(author)).thenReturn(Optional.empty());
+        when(authorRepository.addAuthor(author)).thenReturn(author);
+        PurchaseBookInteractor purchaseBookInteractor = new PurchaseBookInteractor(bookRepository, authorRepository, genreRepository);
+        offer = purchaseBookInteractor.purchaseBook(book, author, "Science Fiction");
     }
 
     private void then_an_offer_is_generated() {
@@ -112,7 +115,7 @@ public class PurchaseBookTest {
     }
 
     private void then_the_author_is_added_to_the_repository() {
-        verify(authorRepository).addAuthor(newAuthor);
+        verify(authorRepository).addAuthor(author);
     }
 
     private Optional<Genre> getScienceFictionGenre() {

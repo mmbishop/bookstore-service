@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public final class Book {
 
-    private static final double PAGES_PER_DOLLAR_RATIO = 30.0;
+    private static final double PAGES_PER_DOLLAR_RATIO = 50.0;
 
     private int id;
     private String title;
@@ -122,10 +122,6 @@ public final class Book {
 
     public void setPrice(BigDecimal newPrice) {
         this.price = Objects.requireNonNullElseGet(newPrice, this::calculateSalesPrice);
-    }
-
-    public void resetPrice() {
-        price = calculateSalesPrice();
     }
 
     private BigDecimal calculateSalesPrice() {

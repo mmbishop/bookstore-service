@@ -43,8 +43,8 @@ public class BookstoreService {
         return retrieveAllAuthorsInteractor.retrieveAllAuthors();
     }
 
-    public BookPurchaseInvoice purchaseBook(Book book, String genreName) {
-        return purchaseBookInteractor.purchaseBook(book, genreName);
+    public BookPurchaseInvoice purchaseBook(Book book, Author author, String genreName) {
+        return purchaseBookInteractor.purchaseBook(book, author, genreName);
     }
 
     public void changeSalesPrice(int bookId, BigDecimal newSalesPrice) {

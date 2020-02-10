@@ -1,7 +1,7 @@
 package com.improving.bookstore.model;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.math.MathContext;
 
 public final class BookPurchaseInvoice {
 
@@ -15,11 +15,6 @@ public final class BookPurchaseInvoice {
         this.purchasePrice = calculatePurchasePrice();
     }
 
-    public BookPurchaseInvoice(Book book, BigDecimal purchasePrice) {
-        this(book);
-        this.purchasePrice = Objects.requireNonNullElseGet(purchasePrice, this::calculatePurchasePrice);
-    }
-
     public Book getBook() {
         return book;
     }
@@ -29,7 +24,7 @@ public final class BookPurchaseInvoice {
     }
 
     private BigDecimal calculatePurchasePrice() {
-        return BigDecimal.valueOf(book.getPrice().doubleValue() * (1.0 - DESIRED_PROFIT_MARGIN_RATIO));
+        return new BigDecimal(String.valueOf(book.getPrice().doubleValue() * (1.0 - DESIRED_PROFIT_MARGIN_RATIO)), new MathContext(3));
     }
 
 }

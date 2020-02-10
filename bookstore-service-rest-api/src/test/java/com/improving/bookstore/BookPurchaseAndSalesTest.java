@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 public class BookPurchaseAndSalesTest {
 
+    private Author author;
     private Book book;
     private BookPurchaseInvoice bookPurchaseInvoice;
     private BookstoreService bookstoreService;
@@ -72,8 +73,9 @@ public class BookPurchaseAndSalesTest {
 
     private void when_a_book_is_purchased_from_a_seller() {
         book = getRedMarsBook();
-        when(purchaseBookInteractor.purchaseBook(book, "Science Fiction")).thenReturn(getBookPurchaseInvoice(book));
-        bookPurchaseInvoice = bookstoreService.purchaseBook(book, "Science Fiction");
+        author = getAuthorKimStanleyRobinson();
+        when(purchaseBookInteractor.purchaseBook(book, author, "Science Fiction")).thenReturn(getBookPurchaseInvoice(book));
+        bookPurchaseInvoice = bookstoreService.purchaseBook(book, author,"Science Fiction");
     }
 
     private void when_a_book_sales_price_change_is_requested() {
@@ -86,7 +88,7 @@ public class BookPurchaseAndSalesTest {
 
     private void then_a_purchase_invoice_is_produced_for_the_seller() {
         assertThat(bookPurchaseInvoice.getBook(), is(book));
-        assertThat(bookPurchaseInvoice.getPurchasePrice(), is(BigDecimal.valueOf(10.5)));
+        assertThat(bookPurchaseInvoice.getPurchasePrice(), is(BigDecimal.valueOf(6.30)));
     }
 
     private void then_the_book_sales_price_is_changed() {
@@ -98,8 +100,12 @@ public class BookPurchaseAndSalesTest {
     }
 
     private Book getRedMarsBook() {
-        return createBook("Red Mars", new Author("Kim", "Stanley", "Robinson"), "A Publisher", 1995,
+        return createBook("Red Mars", getAuthorKimStanleyRobinson(), "A Publisher", 1995,
                 "An ISBN", 450, new Genre("Science Fiction", 1.0));
+    }
+
+    private Author getAuthorKimStanleyRobinson() {
+        return new Author("Kim", "Stanley", "Robinson");
     }
 
     private Book createBook(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre) {
