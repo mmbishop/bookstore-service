@@ -1,7 +1,9 @@
 package com.improving.bookstore.model;
 
+import com.improving.bookstore.util.PriceNormalizer;
+
 import java.math.BigDecimal;
-import java.math.MathContext;
+import java.math.RoundingMode;
 
 public final class BookPurchaseInvoice {
 
@@ -24,7 +26,7 @@ public final class BookPurchaseInvoice {
     }
 
     private BigDecimal calculatePurchasePrice() {
-        return new BigDecimal(String.valueOf(book.getPrice().doubleValue() * (1.0 - DESIRED_PROFIT_MARGIN_RATIO)), new MathContext(3));
+        return PriceNormalizer.normalizePrice(BigDecimal.valueOf(book.getPrice().doubleValue() * (1.0 - DESIRED_PROFIT_MARGIN_RATIO)));
     }
 
 }

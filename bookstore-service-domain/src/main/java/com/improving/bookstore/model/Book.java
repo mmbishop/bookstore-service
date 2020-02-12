@@ -1,6 +1,10 @@
 package com.improving.bookstore.model;
 
+import com.improving.bookstore.util.PriceNormalizer;
+
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public final class Book {
@@ -39,7 +43,7 @@ public final class Book {
 
     public Book(int id, String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre, BigDecimal price) {
         this(id, title, author, publisher, publishYear, isbn, numberOfPages, genre);
-        this.price = price;
+        setPrice(price);
     }
 
     public int getId() {
@@ -114,11 +118,16 @@ public final class Book {
     }
 
     public void setPrice(BigDecimal newPrice) {
-        this.price = Objects.requireNonNullElseGet(newPrice, this::calculateSalesPrice);
+        if (newPrice != null) {
+            price = PriceNormalizer.normalizePrice(newPrice);
+        }
+        else {
+            price = calculateSalesPrice();
+        }
     }
 
     private BigDecimal calculateSalesPrice() {
-        return BigDecimal.valueOf((getNumberOfPages() / PAGES_PER_DOLLAR_RATIO) * genre.getPricingFactor());
+        return PriceNormalizer.normalizePrice(BigDecimal.valueOf((getNumberOfPages() / PAGES_PER_DOLLAR_RATIO) * genre.getPricingFactor()));
     }
 
     @Override

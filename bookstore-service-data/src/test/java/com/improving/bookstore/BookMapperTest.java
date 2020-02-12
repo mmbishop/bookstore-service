@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -78,7 +79,7 @@ public class BookMapperTest {
         bookDataEntity.setPublishYear(1840);
         bookDataEntity.setIsbn("An ISBN");
         bookDataEntity.setNumberOfPages(360);
-        bookDataEntity.setPrice(BigDecimal.valueOf(12.0));
+        bookDataEntity.setPrice(BigDecimal.valueOf(7.2));
         bookDataEntity.setAuthor(authorDataEntity);
         bookDataEntity.setGenre(genreDataEntity);
     }
@@ -138,7 +139,7 @@ public class BookMapperTest {
         assertThat(bookDomainEntity.getPublishYear(), is(1840));
         assertThat(bookDomainEntity.getIsbn(), is("An ISBN"));
         assertThat(bookDomainEntity.getNumberOfPages(), is(360));
-        assertThat(bookDomainEntity.getPrice(), is(BigDecimal.valueOf(12.0)));
+        assertThat(bookDomainEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
         Author author = bookDomainEntity.getAuthor();
         assertThat(author.getFirstName(), is("Edgar"));
         assertThat(author.getMiddleName(), is("Allan"));
@@ -155,7 +156,7 @@ public class BookMapperTest {
         assertThat(bookDataEntity.getPublishYear(), is(1840));
         assertThat(bookDataEntity.getIsbn(), is("An ISBN"));
         assertThat(bookDataEntity.getNumberOfPages(), is(360));
-        assertThat(bookDataEntity.getPrice(), is(BigDecimal.valueOf(12.0)));
+        assertThat(bookDataEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
         AuthorData authorData = bookDataEntity.getAuthor();
         assertThat(authorData.getFirstName(), is("Edgar"));
         assertThat(authorData.getMiddleName(), is("Allan"));

@@ -12,7 +12,6 @@ import com.improving.bookstore.interactors.UnwantedGenreException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -107,7 +106,7 @@ public class PurchaseBookTest {
 
     private void then_an_offer_is_generated() {
         assertThat(offer, is(not(nullValue())));
-        assertThat(offer.getPurchasePrice(), is(BigDecimal.valueOf(7.0)));
+        assertThat(offer.getPurchasePrice().toString(), is("7.00"));
     }
 
     private void then_the_book_is_added_to_the_inventory() {

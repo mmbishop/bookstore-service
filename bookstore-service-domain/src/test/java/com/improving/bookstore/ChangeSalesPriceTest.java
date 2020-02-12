@@ -57,7 +57,7 @@ public class ChangeSalesPriceTest {
     }
 
     private void then_the_sales_price_is_changed() {
-        assertThat(book.getPrice(), is(BigDecimal.valueOf(35.0)));
+        assertThat(book.getPrice().toString(), is("35.00"));
         verify(bookRepository).saveBook(book);
     }
 

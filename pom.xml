@@ -11,11 +11,12 @@
     <groupId>com.improving</groupId>
     <artifactId>bookstore-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>bookstore-service</name>
     <description>Demo project for Java for C# Developers ImprovingU</description>
 
     <properties>
-        <java.version>13</java.version>
+        <maven.compiler.release>13</maven.compiler.release>
     </properties>
 
     <modules>
@@ -38,5 +39,19 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>13</source>
+                    <target>13</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

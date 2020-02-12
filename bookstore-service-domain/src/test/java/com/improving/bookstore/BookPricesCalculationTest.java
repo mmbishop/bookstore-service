@@ -6,6 +6,7 @@ import com.improving.bookstore.model.BookPurchaseInvoice;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,11 +22,11 @@ public class BookPricesCalculationTest {
     public void book_sales_price_is_calculated_from_page_count() {
         given_a_book_with_page_count(300);
         when_its_sales_price_is_calculated();
-        then_the_calculated_sales_price_is(BigDecimal.valueOf(10.0));
+        then_the_calculated_sales_price_is("6.00");
 
         given_a_book_with_page_count(150);
         when_its_sales_price_is_calculated();
-        then_the_calculated_sales_price_is(BigDecimal.valueOf(5.0));
+        then_the_calculated_sales_price_is("3.00");
     }
 
     @Test
@@ -33,12 +34,12 @@ public class BookPricesCalculationTest {
         given_a_book_with_page_count(300);
         given_an_offer_to_buy_the_book();
         when_its_offer_price_is_calculated();
-        then_the_calculated_offer_price_is(BigDecimal.valueOf(7.0));
+        then_the_calculated_offer_price_is("4.20");
 
         given_a_book_with_page_count(450);
         given_an_offer_to_buy_the_book();
         when_its_offer_price_is_calculated();
-        then_the_calculated_offer_price_is(BigDecimal.valueOf(10.5));
+        then_the_calculated_offer_price_is("6.30");
     }
 
     private void given_a_book_with_page_count(int pageCount) {
@@ -57,12 +58,12 @@ public class BookPricesCalculationTest {
         offerPrice = offer.getPurchasePrice();
     }
 
-    private void then_the_calculated_sales_price_is(BigDecimal expectedSalesPrice) {
-        assertThat(salesPrice, is(expectedSalesPrice));
+    private void then_the_calculated_sales_price_is(String expectedSalesPrice) {
+        assertThat(salesPrice.toString(), is(expectedSalesPrice));
     }
 
-    private void then_the_calculated_offer_price_is(BigDecimal expectedOfferPrice) {
-        assertThat(offerPrice, is(expectedOfferPrice));
+    private void then_the_calculated_offer_price_is(String expectedOfferPrice) {
+        assertThat(offerPrice.toString(), is(expectedOfferPrice));
     }
 
     private Genre getGenre() {

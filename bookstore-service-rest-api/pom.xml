@@ -15,10 +15,6 @@
     <name>bookstore-service-rest-api</name>
     <description>Bookstore service REST API</description>
 
-    <properties>
-        <java.version>13</java.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

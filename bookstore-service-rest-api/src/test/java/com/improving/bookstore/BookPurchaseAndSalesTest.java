@@ -88,7 +88,7 @@ public class BookPurchaseAndSalesTest {
 
     private void then_a_purchase_invoice_is_produced_for_the_seller() {
         assertThat(bookPurchaseInvoice.getBook(), is(book));
-        assertThat(bookPurchaseInvoice.getPurchasePrice(), is(BigDecimal.valueOf(6.30)));
+        assertThat(bookPurchaseInvoice.getPurchasePrice().toString(), is("6.30"));
     }
 
     private void then_the_book_sales_price_is_changed() {
