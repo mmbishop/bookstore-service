@@ -1,6 +1,6 @@
 package com.improving.bookstore.controllers;
 
-import com.improving.bookstore.dto.ChangeSalesPriceRequest;
+import com.improving.bookstore.dto.BookSalesPriceRequest;
 import com.improving.bookstore.dto.PurchaseBookRequest;
 import com.improving.bookstore.dto.PurchaseBookResponse;
 import com.improving.bookstore.model.Author;
@@ -74,9 +74,15 @@ public class BookstoreController {
         return ResponseEntity.ok(genre);
     }
 
-    @PutMapping(path = "/books/{bookId}", consumes = MediaType.APPLICATION_JSON)
-    public ResponseEntity<?> changeSalesPrice(@PathVariable("bookId") int bookId, @RequestBody ChangeSalesPriceRequest changeSalesPriceRequest) {
-        bookstoreService.changeSalesPrice(bookId, changeSalesPriceRequest.getNewPrice());
+    @PutMapping(path = "/books/{bookId}/onsale", consumes = MediaType.APPLICATION_JSON)
+    public ResponseEntity<?> putBookOnSale(@PathVariable("bookId") int bookId, @RequestBody BookSalesPriceRequest bookSalesPriceRequest) {
+        bookstoreService.putBookOnSale(bookId, bookSalesPriceRequest.getNewPrice());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/books/{bookId}/offsale")
+    public ResponseEntity<?> takeBookOffSale(@PathVariable("bookId") int bookId) {
+        bookstoreService.takeBookOffSale(bookId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -87,7 +93,7 @@ public class BookstoreController {
         return ResponseEntity.ok(new PurchaseBookResponse(invoice));
     }
 
-    @PostMapping(path = "/books/{bookId}", produces = MediaType.APPLICATION_JSON)
+    @PostMapping(path = "/books/{bookId}/sell", produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<Book> sellBook(@PathVariable("bookId") int bookId) {
         Book soldBook = bookstoreService.sellBook(bookId);
         return ResponseEntity.ok(soldBook);

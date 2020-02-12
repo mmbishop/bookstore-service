@@ -1,10 +1,9 @@
 package com.improving.bookstore.model;
 
+import com.improving.bookstore.interactors.UnspecifiedSalesPriceException;
 import com.improving.bookstore.util.PriceNormalizer;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 public final class Book {
@@ -122,8 +121,12 @@ public final class Book {
             price = PriceNormalizer.normalizePrice(newPrice);
         }
         else {
-            price = calculateSalesPrice();
+            throw new UnspecifiedSalesPriceException();
         }
+    }
+
+    public void resetPrice() {
+        price = calculateSalesPrice();
     }
 
     private BigDecimal calculateSalesPrice() {

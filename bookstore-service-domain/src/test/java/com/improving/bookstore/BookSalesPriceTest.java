@@ -5,7 +5,7 @@ import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.BookRepository;
 import com.improving.bookstore.interactors.BookNotFoundException;
-import com.improving.bookstore.interactors.ChangeSalesPriceInteractor;
+import com.improving.bookstore.interactors.BookSaleInteractor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,21 +14,28 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.*;
 
-public class ChangeSalesPriceTest {
+public class BookSalesPriceTest {
 
     private Book book;
     private BookRepository bookRepository;
 
     @Test
-    void book_sales_price_is_changed() {
+    void book_is_put_on_sale() {
         given_a_book_repository();
         given_a_book();
-        when_a_sales_price_change_is_requested();
-        then_the_sales_price_is_changed();
+        when_the_book_is_put_on_sale();
+        then_the_sales_price_is_reduced();
+    }
+
+    @Test
+    void book_is_taken_off_sale() {
+        given_a_book_repository();
+        given_a_book();
+        when_the_book_is_taken_off_sale();
+        then_the_sales_price_is_reset();
     }
 
     @Test
@@ -45,20 +52,32 @@ public class ChangeSalesPriceTest {
         book = getBook();
     }
 
-    private void when_a_sales_price_change_is_requested() {
+    private void when_the_book_is_put_on_sale() {
         when(bookRepository.getBookById(1)).thenReturn(Optional.of(book));
-        ChangeSalesPriceInteractor changeSalesPriceInteractor = new ChangeSalesPriceInteractor(bookRepository);
-        changeSalesPriceInteractor.changeSalesPrice(1, BigDecimal.valueOf(35.0));
+        BookSaleInteractor bookSaleInteractor = new BookSaleInteractor(bookRepository);
+        bookSaleInteractor.putBookOnSale(1, BigDecimal.valueOf(20.0));
+    }
+
+    private void when_the_book_is_taken_off_sale() {
+        when(bookRepository.getBookById(1)).thenReturn(Optional.of(book));
+        BookSaleInteractor bookSaleInteractor = new BookSaleInteractor(bookRepository);
+        bookSaleInteractor.putBookOnSale(1, BigDecimal.valueOf(20.0));
+        bookSaleInteractor.takeBookOffSale(1);
     }
 
     private void when_a_sales_price_change_is_requested_for_a_book_we_do_not_have() {
-        ChangeSalesPriceInteractor changeSalesPriceInteractor = new ChangeSalesPriceInteractor(bookRepository);
-        changeSalesPriceInteractor.changeSalesPrice(0, BigDecimal.valueOf(35.0));
+        BookSaleInteractor bookSaleInteractor = new BookSaleInteractor(bookRepository);
+        bookSaleInteractor.putBookOnSale(0, BigDecimal.valueOf(20.0));
     }
 
-    private void then_the_sales_price_is_changed() {
-        assertThat(book.getPrice().toString(), is("35.00"));
+    private void then_the_sales_price_is_reduced() {
+        assertThat(book.getPrice().toString(), is("20.00"));
         verify(bookRepository).saveBook(book);
+    }
+
+    private void then_the_sales_price_is_reset() {
+        assertThat(book.getPrice().toString(), is("24.00"));
+        verify(bookRepository, times(2)).saveBook(book);
     }
 
     private Book getBook() {

@@ -5,7 +5,6 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 public class BookstoreService {
 
     private AddGenreInteractor addGenreInteractor;
-    private ChangeSalesPriceInteractor changeSalesPriceInteractor;
+    private BookSaleInteractor bookSaleInteractor;
     private PurchaseBookInteractor purchaseBookInteractor;
     private RetrieveAllAuthorsInteractor retrieveAllAuthorsInteractor;
     private RetrieveAllBooksInteractor retrieveAllBooksInteractor;
@@ -47,8 +46,12 @@ public class BookstoreService {
         return purchaseBookInteractor.purchaseBook(book, author, genreName);
     }
 
-    public void changeSalesPrice(int bookId, BigDecimal newSalesPrice) {
-        changeSalesPriceInteractor.changeSalesPrice(bookId, newSalesPrice);
+    public void putBookOnSale(int bookId, BigDecimal newSalesPrice) {
+        bookSaleInteractor.putBookOnSale(bookId, newSalesPrice);
+    }
+
+    public void takeBookOffSale(int bookId) {
+        bookSaleInteractor.takeBookOffSale(bookId);
     }
 
     public Book sellBook(int bookId) {
@@ -87,8 +90,8 @@ public class BookstoreService {
         this.purchaseBookInteractor = purchaseBookInteractor;
     }
 
-    public void setChangeSalesPriceInteractor(ChangeSalesPriceInteractor changeSalesPriceInteractor) {
-        this.changeSalesPriceInteractor = changeSalesPriceInteractor;
+    public void setBookSaleInteractor(BookSaleInteractor bookSaleInteractor) {
+        this.bookSaleInteractor = bookSaleInteractor;
     }
 
     public void setSellBookInteractor(SellBookInteractor sellBookInteractor) {

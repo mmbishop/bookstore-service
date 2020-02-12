@@ -13,7 +13,7 @@
         <constructor-arg ref="genreRepository"/>
     </bean>
 
-    <bean id="changeSalesPriceInteractor" class="com.improving.bookstore.interactors.ChangeSalesPriceInteractor">
+    <bean id="bookSaleInteractor" class="com.improving.bookstore.interactors.BookSaleInteractor">
         <constructor-arg ref="bookRepository"/>
     </bean>
 
@@ -84,7 +84,7 @@
         <property name="retrieveBooksByGenreInteractor" ref="retrieveBooksByGenreInteractor"/>
         <property name="retrieveBooksByTitleInteractor" ref="retrieveBooksByTitleInteractor"/>
         <property name="addGenreInteractor" ref="addGenreInteractor"/>
-        <property name="changeSalesPriceInteractor" ref="changeSalesPriceInteractor"/>
+        <property name="bookSaleInteractor" ref="bookSaleInteractor"/>
         <property name="purchaseBookInteractor" ref="purchaseBookInteractor"/>
         <property name="sellBookInteractor" ref="sellBooksInteractor"/>
     </bean>

@@ -2,7 +2,7 @@ package com.improving.bookstore.dto;
 
 import java.math.BigDecimal;
 
-public class ChangeSalesPriceRequest {
+public class BookSalesPriceRequest {
 
     private BigDecimal newPrice;
 

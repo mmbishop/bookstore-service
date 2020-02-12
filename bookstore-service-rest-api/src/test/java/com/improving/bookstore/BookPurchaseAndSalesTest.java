@@ -1,6 +1,6 @@
 package com.improving.bookstore;
 
-import com.improving.bookstore.interactors.ChangeSalesPriceInteractor;
+import com.improving.bookstore.interactors.BookSaleInteractor;
 import com.improving.bookstore.interactors.PurchaseBookInteractor;
 import com.improving.bookstore.interactors.SellBookInteractor;
 import com.improving.bookstore.model.Author;
@@ -24,7 +24,7 @@ public class BookPurchaseAndSalesTest {
     private Book book;
     private BookPurchaseInvoice bookPurchaseInvoice;
     private BookstoreService bookstoreService;
-    private ChangeSalesPriceInteractor changeSalesPriceInteractor;
+    private BookSaleInteractor bookSaleInteractor;
     private PurchaseBookInteractor purchaseBookInteractor;
     private SellBookInteractor sellBookInteractor;
 
@@ -62,8 +62,8 @@ public class BookPurchaseAndSalesTest {
     }
 
     private void given_an_interactor_for_changing_the_sales_price() {
-        changeSalesPriceInteractor = Mockito.mock(ChangeSalesPriceInteractor.class);
-        bookstoreService.setChangeSalesPriceInteractor(changeSalesPriceInteractor);
+        bookSaleInteractor = Mockito.mock(BookSaleInteractor.class);
+        bookstoreService.setBookSaleInteractor(bookSaleInteractor);
     }
 
     private void given_an_interactor_for_selling_a_book() {
@@ -79,7 +79,7 @@ public class BookPurchaseAndSalesTest {
     }
 
     private void when_a_book_sales_price_change_is_requested() {
-        bookstoreService.changeSalesPrice(1, BigDecimal.valueOf(12.0));
+        bookstoreService.putBookOnSale(1, BigDecimal.valueOf(12.0));
     }
 
     private void when_a_book_is_sold() {
@@ -92,7 +92,7 @@ public class BookPurchaseAndSalesTest {
     }
 
     private void then_the_book_sales_price_is_changed() {
-        verify(changeSalesPriceInteractor).changeSalesPrice(1, BigDecimal.valueOf(12.0));
+        verify(bookSaleInteractor).putBookOnSale(1, BigDecimal.valueOf(12.0));
     }
 
     private void then_the_book_is_removed_from_the_inventory() {
