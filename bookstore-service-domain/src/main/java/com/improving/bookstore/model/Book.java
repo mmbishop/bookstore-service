@@ -38,14 +38,7 @@ public final class Book {
     }
 
     public Book(int id, String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre, BigDecimal price) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.publishYear = publishYear;
-        this.isbn = isbn;
-        this.numberOfPages = numberOfPages;
-        this.genre = genre;
+        this(id, title, author, publisher, publishYear, isbn, numberOfPages, genre);
         this.price = price;
     }
 
