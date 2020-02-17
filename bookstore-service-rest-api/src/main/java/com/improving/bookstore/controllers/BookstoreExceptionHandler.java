@@ -1,6 +1,7 @@
 package com.improving.bookstore.controllers;
 
 import com.improving.bookstore.interactors.BookNotFoundException;
+import com.improving.bookstore.interactors.GenreDeletionException;
 import com.improving.bookstore.interactors.UnwantedGenreException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +17,11 @@ public class BookstoreExceptionHandler {
 
     @ExceptionHandler(UnwantedGenreException.class)
     public ResponseEntity<String> handleUnwantedGenreException(UnwantedGenreException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(GenreDeletionException.class)
+    public ResponseEntity<String> handleGenreDeletionException(GenreDeletionException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
