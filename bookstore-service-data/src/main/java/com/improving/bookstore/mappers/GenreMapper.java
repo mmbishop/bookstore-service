@@ -9,7 +9,9 @@ public class GenreMapper {
         if (genreData == null) {
             return null;
         }
-        return new Genre(genreData.getId(), genreData.getName(), genreData.getPricingFactor());
+        Genre genre = new Genre(genreData.getName(), genreData.getPricingFactor());
+        genre.setId(genreData.getId());
+        return genre;
     }
 
     public GenreData mapFrom(Genre genre) {

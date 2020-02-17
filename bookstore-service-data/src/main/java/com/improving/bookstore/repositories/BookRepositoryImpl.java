@@ -55,8 +55,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public void addBook(Book book) {
-        dataSource.save(bookMapper.mapFrom(book));
+    public Book addBook(Book book) {
+        return bookMapper.mapFrom(dataSource.save(bookMapper.mapFrom(book)));
     }
 
     @Override
@@ -65,8 +65,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public void saveBook(Book book) {
-        dataSource.save(bookMapper.mapFrom(book));
+    public Book saveBook(Book book) {
+        return bookMapper.mapFrom(dataSource.save(bookMapper.mapFrom(book)));
     }
 
 }

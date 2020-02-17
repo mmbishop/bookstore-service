@@ -40,8 +40,8 @@ public class BookstoreController {
         return ResponseEntity.ok(bookstoreService.getAllGenres());
     }
 
-    @GetMapping(path = "/booksbytitle", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam("title") String title) {
+    @GetMapping(path = "/books/title/{title}", produces = MediaType.APPLICATION_JSON)
+    public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable("title") String title) {
         List<Book> booksByTitle = bookstoreService.getBooksByTitle(title);
         if (booksByTitle.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,7 +49,7 @@ public class BookstoreController {
         return ResponseEntity.ok(booksByTitle);
     }
 
-    @GetMapping(path = "/booksbyauthor", produces = MediaType.APPLICATION_JSON)
+    @GetMapping(path = "/books/author", produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam("firstName") String authorFirstName, @RequestParam("middleName") String authorMiddleName,
                                        @RequestParam("lastName") String authorLastName) {
         List<Book> booksByAuthor = bookstoreService.getBooksByAuthor(authorFirstName, authorMiddleName.length() > 0 ? authorMiddleName : null, authorLastName);
@@ -59,8 +59,8 @@ public class BookstoreController {
         return ResponseEntity.ok(booksByAuthor);
     }
 
-    @GetMapping(path = "/booksbygenre", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Book>> getBooksByGenre(@RequestParam("genre") String genreName) {
+    @GetMapping(path = "/books/genre/{genre}", produces = MediaType.APPLICATION_JSON)
+    public ResponseEntity<List<Book>> getBooksByGenre(@PathVariable("genre") String genreName) {
         List<Book> booksByGenre = bookstoreService.getBooksByGenre(genreName);
         if (booksByGenre.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -70,8 +70,13 @@ public class BookstoreController {
 
     @PostMapping(path = "/genre", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
-        bookstoreService.addGenre(genre);
-        return ResponseEntity.ok(genre);
+        return ResponseEntity.ok(bookstoreService.addGenre(genre));
+    }
+
+    @DeleteMapping(path = "/genre/{genreName}")
+    public ResponseEntity<?> deleteGenre(@PathVariable("genreName") String genreName) {
+        bookstoreService.deleteGenre(genreName);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(path = "/books/{bookId}/onsale", consumes = MediaType.APPLICATION_JSON)

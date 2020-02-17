@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface GenreRepository {
 
-    void addGenre(Genre genre);
+    Genre addGenre(Genre genre);
+
+    void deleteGenre(Genre genre);
 
     Optional<Genre> getGenreByName(String genreName);
 

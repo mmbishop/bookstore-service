@@ -13,6 +13,7 @@ public class BookstoreService {
 
     private AddGenreInteractor addGenreInteractor;
     private BookSaleInteractor bookSaleInteractor;
+    private DeleteGenreInteractor deleteGenreInteractor;
     private PurchaseBookInteractor purchaseBookInteractor;
     private RetrieveAllAuthorsInteractor retrieveAllAuthorsInteractor;
     private RetrieveAllBooksInteractor retrieveAllBooksInteractor;
@@ -62,8 +63,12 @@ public class BookstoreService {
         return retrieveAllGenresInteractor.retrieveAllGenres();
     }
 
-    public void addGenre(Genre genre) {
-        addGenreInteractor.addGenre(genre);
+    public Genre addGenre(Genre genre) {
+        return addGenreInteractor.addGenre(genre);
+    }
+
+    public void deleteGenre(String genreName) {
+        deleteGenreInteractor.deleteGenre(genreName);
     }
 
     public void setRetrieveAllAuthorsInteractor(RetrieveAllAuthorsInteractor retrieveAllAuthorsInteractor) {
@@ -104,6 +109,10 @@ public class BookstoreService {
 
     public void setAddGenreInteractor(AddGenreInteractor addGenreInteractor) {
         this.addGenreInteractor = addGenreInteractor;
+    }
+
+    public void setDeleteGenreInteractor(DeleteGenreInteractor deleteGenreInteractor) {
+        this.deleteGenreInteractor = deleteGenreInteractor;
     }
 
 }

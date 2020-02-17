@@ -13,14 +13,12 @@ public final class Genre {
         this.pricingFactor = pricingFactor;
     }
 
-    public Genre(int id, String name, double pricingFactor) {
-        this.id = id;
-        this.name = name;
-        this.pricingFactor = pricingFactor;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

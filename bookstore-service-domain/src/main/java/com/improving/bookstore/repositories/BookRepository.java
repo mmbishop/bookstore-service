@@ -18,10 +18,10 @@ public interface BookRepository {
 
     List<Book> getBooksByGenre(String genreName);
 
-    void addBook(Book book);
+    Book addBook(Book book);
 
     void deleteBook(Book book);
 
-    void saveBook(Book book);
+    Book saveBook(Book book);
 
 }

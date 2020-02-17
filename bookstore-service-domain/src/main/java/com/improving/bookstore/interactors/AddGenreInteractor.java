@@ -11,8 +11,8 @@ public class AddGenreInteractor {
         this.genreRepository = genreRepository;
     }
 
-    public void addGenre(Genre genre) {
-        genreRepository.addGenre(genre);
+    public Genre addGenre(Genre genre) {
+        return genreRepository.addGenre(genre);
     }
 
 }

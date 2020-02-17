@@ -24,8 +24,13 @@ public class GenreRepositoryImpl implements GenreRepository {
     }
 
     @Override
-    public void addGenre(Genre genre) {
-        dataSource.save(genreMapper.mapFrom(genre));
+    public Genre addGenre(Genre genre) {
+        return genreMapper.mapFrom(dataSource.save(genreMapper.mapFrom(genre)));
+    }
+
+    @Override
+    public void deleteGenre(Genre genre) {
+        dataSource.delete(genreMapper.mapFrom(genre));
     }
 
     @Override
