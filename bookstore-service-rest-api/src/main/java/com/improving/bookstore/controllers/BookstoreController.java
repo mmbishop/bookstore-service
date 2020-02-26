@@ -8,19 +8,23 @@ import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.services.BookstoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Component
 @RestController
 @RequestMapping("bookstore")
 public class BookstoreController {
 
     private BookstoreService bookstoreService;
 
+    @Autowired
     public BookstoreController(BookstoreService bookstoreService) {
         this.bookstoreService = bookstoreService;
     }

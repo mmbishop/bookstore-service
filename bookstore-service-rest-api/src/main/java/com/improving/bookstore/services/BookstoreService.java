@@ -5,10 +5,13 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Service
 public class BookstoreService {
 
     private AddGenreInteractor addGenreInteractor;
@@ -71,46 +74,57 @@ public class BookstoreService {
         deleteGenreInteractor.deleteGenre(genreName);
     }
 
+    @Autowired
     public void setRetrieveAllAuthorsInteractor(RetrieveAllAuthorsInteractor retrieveAllAuthorsInteractor) {
         this.retrieveAllAuthorsInteractor = retrieveAllAuthorsInteractor;
     }
 
+    @Autowired
     public void setRetrieveAllBooksInteractor(RetrieveAllBooksInteractor retrieveAllBooksInteractor) {
         this.retrieveAllBooksInteractor = retrieveAllBooksInteractor;
     }
 
+    @Autowired
     public void setRetrieveBooksByAuthorInteractor(RetrieveBooksByAuthorInteractor retrieveBooksByAuthorInteractor) {
         this.retrieveBooksByAuthorInteractor = retrieveBooksByAuthorInteractor;
     }
 
+    @Autowired
     public void setRetrieveBooksByGenreInteractor(RetrieveBooksByGenreInteractor retrieveBooksByGenreInteractor) {
         this.retrieveBooksByGenreInteractor = retrieveBooksByGenreInteractor;
     }
 
+    @Autowired
     public void setRetrieveBooksByTitleInteractor(RetrieveBooksByTitleInteractor retrieveBooksByTitleInteractor) {
         this.retrieveBooksByTitleInteractor = retrieveBooksByTitleInteractor;
     }
 
+    @Autowired
     public void setPurchaseBookInteractor(PurchaseBookInteractor purchaseBookInteractor) {
         this.purchaseBookInteractor = purchaseBookInteractor;
     }
 
+    @Autowired
     public void setBookSaleInteractor(BookSaleInteractor bookSaleInteractor) {
         this.bookSaleInteractor = bookSaleInteractor;
     }
 
+    @Autowired
     public void setSellBookInteractor(SellBookInteractor sellBookInteractor) {
         this.sellBookInteractor = sellBookInteractor;
     }
 
+    @Autowired
     public void setRetrieveAllGenresInteractor(RetrieveAllGenresInteractor retrieveAllGenresInteractor) {
         this.retrieveAllGenresInteractor = retrieveAllGenresInteractor;
     }
 
+    @Autowired
     public void setAddGenreInteractor(AddGenreInteractor addGenreInteractor) {
         this.addGenreInteractor = addGenreInteractor;
     }
 
+    @Autowired
     public void setDeleteGenreInteractor(DeleteGenreInteractor deleteGenreInteractor) {
         this.deleteGenreInteractor = deleteGenreInteractor;
     }
