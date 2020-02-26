@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <jpa:repositories base-package="com.improving.bookstore.repositories"/>
+
+    <bean id="authorRepository" class="com.improving.bookstore.repositories.AuthorRepositoryImpl">
+        <constructor-arg index="0" ref="authorDataSource"/>
+        <constructor-arg index="1" ref="authorMapper"/>
+    </bean>
+
+    <bean id="bookRepository" class="com.improving.bookstore.repositories.BookRepositoryImpl">
+        <constructor-arg index="0" ref="bookDataSource"/>
+        <constructor-arg index="1" ref="bookMapper"/>
+        <constructor-arg index="2" ref="authorMapper"/>
+    </bean>
+
+    <bean id="genreRepository" class="com.improving.bookstore.repositories.GenreRepositoryImpl">
+        <constructor-arg index="0" ref="genreDataSource"/>
+        <constructor-arg index="1" ref="genreMapper"/>
+    </bean>
+
+    <bean id="bookMapper" class="com.improving.bookstore.mappers.BookMapper">
+        <constructor-arg index="0" ref="authorMapper"/>
+        <constructor-arg index="1" ref="genreMapper"/>
+    </bean>
+
+    <bean id="authorMapper" class="com.improving.bookstore.mappers.AuthorMapper"/>
+
+    <bean id="genreMapper" class="com.improving.bookstore.mappers.GenreMapper"/>
+
+</beans>
