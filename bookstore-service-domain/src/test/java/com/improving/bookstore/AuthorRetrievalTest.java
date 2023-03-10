@@ -3,6 +3,9 @@ package com.improving.bookstore;
 import com.improving.bookstore.model.Author;
 import com.improving.bookstore.repositories.AuthorRepository;
 import com.improving.bookstore.interactors.RetrieveAllAuthorsInteractor;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,29 +17,28 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class AuthorRetrievalTest {
 
-    private AuthorRepository authorRepository;
-    private List<Author> allAuthors = getAllAuthors();
-    private List<Author> authorList;
+    private final GwtTest<AuthorTestContext> gwt = new GwtTest<>(AuthorTestContext.class);
 
     @Test
     void all_authors_are_retrieved() {
-        given_an_author_repository();
-        when_all_authors_are_requested();
-        then_all_authors_are_retrieved();
+        gwt.test()
+                .given(an_author_repository)
+                .and(authors)
+                .when(requesting_all_authors)
+                .then(all_authors_are_retrieved);
     }
 
-    private void given_an_author_repository() {
-        authorRepository = Mockito.mock(AuthorRepository.class);
-    }
+    private final GwtFunction<AuthorTestContext> an_author_repository = context -> context.authorRepository = Mockito.mock(AuthorRepository.class);
 
-    private void when_all_authors_are_requested() {
-        when(authorRepository.getAllAuthors()).thenReturn(allAuthors);
-        authorList = new RetrieveAllAuthorsInteractor(authorRepository).retrieveAllAuthors();
-    }
+    private final GwtFunction<AuthorTestContext> authors = context -> context.allAuthors = getAllAuthors();
 
-    private void then_all_authors_are_retrieved() {
-        assertThat(authorList.size(), is(allAuthors.size()));
-    }
+    private final GwtFunction<AuthorTestContext> requesting_all_authors = context -> {
+        when(context.authorRepository.getAllAuthors()).thenReturn(context.allAuthors);
+        context.authorList = new RetrieveAllAuthorsInteractor(context.authorRepository).retrieveAllAuthors();
+    };
+
+    private final GwtFunction<AuthorTestContext> all_authors_are_retrieved
+            = context -> assertThat(context.authorList.size(), is(context.allAuthors.size()));
 
     private List<Author> getAllAuthors() {
         return List.of(
@@ -44,6 +46,12 @@ public class AuthorRetrievalTest {
                 new Author("Stephen", "R", "Donaldson"),
                 new Author("Peter", "F", "Hamilton")
         );
+    }
+
+    public static final class AuthorTestContext extends Context {
+        AuthorRepository authorRepository;
+        List<Author> allAuthors;
+        List<Author> authorList;
     }
 
 }

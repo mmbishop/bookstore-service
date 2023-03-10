@@ -8,6 +8,9 @@ import com.improving.bookstore.model.Book;
 import com.improving.bookstore.model.BookPurchaseInvoice;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.services.BookstoreService;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -20,84 +23,75 @@ import static org.mockito.Mockito.when;
 
 public class BookPurchaseAndSalesTest {
 
-    private Author author;
-    private Book book;
-    private BookPurchaseInvoice bookPurchaseInvoice;
-    private BookstoreService bookstoreService;
-    private BookSaleInteractor bookSaleInteractor;
-    private PurchaseBookInteractor purchaseBookInteractor;
-    private SellBookInteractor sellBookInteractor;
+    private final GwtTest<PurchaseTestContext> gwt = new GwtTest<>(PurchaseTestContext.class);
 
     @Test
     void book_is_purchased_from_seller() {
-        given_a_bookstore_service();
-        given_an_interactor_for_purchasing_books();
-        when_a_book_is_purchased_from_a_seller();
-        then_a_purchase_invoice_is_produced_for_the_seller();
+        gwt.test()
+                .given(a_bookstore_service)
+                .and(an_iteractor_for_purchasing_books)
+                .when(purchasing_a_book_from_a_seller)
+                .then(a_purchase_invoice_is_produced_for_the_seller);
     }
 
     @Test
     void book_sales_price_is_changed() {
-        given_a_bookstore_service();
-        given_an_interactor_for_changing_the_sales_price();
-        when_a_book_sales_price_change_is_requested();
-        then_the_book_sales_price_is_changed();
+        gwt.test()
+                .given(a_bookstore_service)
+                .and(an_iteractor_for_changing_the_sales_price)
+                .when(requesting_a_book_sales_price_change)
+                .then(the_book_sales_price_is_changed);
     }
 
     @Test
     void book_is_sold_to_a_customer() {
-        given_a_bookstore_service();
-        given_an_interactor_for_selling_a_book();
-        when_a_book_is_sold();
-        then_the_book_is_removed_from_the_inventory();
+        gwt.test()
+                .given(a_bookstore_service)
+                .and(an_interactor_for_selling_a_book)
+                .when(selling_a_book)
+                .then(the_book_is_removed_from_the_inventory);
     }
 
-    private void given_a_bookstore_service() {
-        bookstoreService = new BookstoreService();
-    }
+    private final GwtFunction<PurchaseTestContext> a_bookstore_service = context -> context.bookstoreService = new BookstoreService();
 
-    private void given_an_interactor_for_purchasing_books() {
-        purchaseBookInteractor = Mockito.mock(PurchaseBookInteractor.class);
-        bookstoreService.setPurchaseBookInteractor(purchaseBookInteractor);
-    }
+    private final GwtFunction<PurchaseTestContext> an_iteractor_for_purchasing_books = context -> {
+        context.purchaseBookInteractor = Mockito.mock(PurchaseBookInteractor.class);
+        context.bookstoreService.setPurchaseBookInteractor(context.purchaseBookInteractor);
+    };
 
-    private void given_an_interactor_for_changing_the_sales_price() {
-        bookSaleInteractor = Mockito.mock(BookSaleInteractor.class);
-        bookstoreService.setBookSaleInteractor(bookSaleInteractor);
-    }
+    private final GwtFunction<PurchaseTestContext> an_iteractor_for_changing_the_sales_price = context -> {
+        context.bookSaleInteractor = Mockito.mock(BookSaleInteractor.class);
+        context.bookstoreService.setBookSaleInteractor(context.bookSaleInteractor);
+    };
 
-    private void given_an_interactor_for_selling_a_book() {
-        sellBookInteractor = Mockito.mock(SellBookInteractor.class);
-        bookstoreService.setSellBookInteractor(sellBookInteractor);
-    }
+    private final GwtFunction<PurchaseTestContext> an_interactor_for_selling_a_book = context -> {
+        context.sellBookInteractor = Mockito.mock(SellBookInteractor.class);
+        context.bookstoreService.setSellBookInteractor(context.sellBookInteractor);
+    };
 
-    private void when_a_book_is_purchased_from_a_seller() {
-        book = getRedMarsBook();
-        author = getAuthorKimStanleyRobinson();
-        when(purchaseBookInteractor.purchaseBook(book, author, "Science Fiction")).thenReturn(getBookPurchaseInvoice(book));
-        bookPurchaseInvoice = bookstoreService.purchaseBook(book, author,"Science Fiction");
-    }
+    private final GwtFunction<PurchaseTestContext> purchasing_a_book_from_a_seller = context -> {
+        context.book = getRedMarsBook();
+        context.author = getAuthorKimStanleyRobinson();
+        when(context.purchaseBookInteractor.purchaseBook(context.book, context.author, "Science Fiction"))
+                .thenReturn(getBookPurchaseInvoice(context.book));
+        context.bookPurchaseInvoice = context.bookstoreService.purchaseBook(context.book, context.author,"Science Fiction");
+    };
 
-    private void when_a_book_sales_price_change_is_requested() {
-        bookstoreService.putBookOnSale(1, BigDecimal.valueOf(12.0));
-    }
+    private final GwtFunction<PurchaseTestContext> requesting_a_book_sales_price_change
+            = context -> context.bookstoreService.putBookOnSale(1, BigDecimal.valueOf(12.0));
 
-    private void when_a_book_is_sold() {
-        bookstoreService.sellBook(1);
-    }
+    private final GwtFunction<PurchaseTestContext> selling_a_book = context -> context.bookstoreService.sellBook(1);
 
-    private void then_a_purchase_invoice_is_produced_for_the_seller() {
-        assertThat(bookPurchaseInvoice.getBook(), is(book));
-        assertThat(bookPurchaseInvoice.getPurchasePrice().toString(), is("6.30"));
-    }
+    private final GwtFunction<PurchaseTestContext> a_purchase_invoice_is_produced_for_the_seller = context -> {
+        assertThat(context.bookPurchaseInvoice.getBook(), is(context.book));
+        assertThat(context.bookPurchaseInvoice.getPurchasePrice().toString(), is("6.30"));
+    };
 
-    private void then_the_book_sales_price_is_changed() {
-        verify(bookSaleInteractor).putBookOnSale(1, BigDecimal.valueOf(12.0));
-    }
+    private final GwtFunction<PurchaseTestContext> the_book_sales_price_is_changed
+            = context -> verify(context.bookSaleInteractor).putBookOnSale(1, BigDecimal.valueOf(12.0));
 
-    private void then_the_book_is_removed_from_the_inventory() {
-        verify(sellBookInteractor).sellBook(1);
-    }
+    private final GwtFunction<PurchaseTestContext> the_book_is_removed_from_the_inventory
+            = context -> verify(context.sellBookInteractor).sellBook(1);
 
     private Book getRedMarsBook() {
         return createBook("Red Mars", getAuthorKimStanleyRobinson(), "A Publisher", 1995,
@@ -114,6 +108,16 @@ public class BookPurchaseAndSalesTest {
 
     private BookPurchaseInvoice getBookPurchaseInvoice(Book book) {
         return new BookPurchaseInvoice(book);
+    }
+
+    public static final class PurchaseTestContext extends Context {
+        Author author;
+        Book book;
+        BookPurchaseInvoice bookPurchaseInvoice;
+        BookstoreService bookstoreService;
+        BookSaleInteractor bookSaleInteractor;
+        PurchaseBookInteractor purchaseBookInteractor;
+        SellBookInteractor sellBookInteractor;
     }
 
 }

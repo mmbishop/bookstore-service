@@ -3,6 +3,9 @@ package com.improving.bookstore;
 import com.improving.bookstore.model.Genre;
 import com.improving.bookstore.repositories.GenreRepository;
 import com.improving.bookstore.interactors.RetrieveAllGenresInteractor;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,29 +17,29 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class GenreRetrievalTest {
 
-    private GenreRepository genreRepository;
-    private List<Genre> allGenres = getAllGenres();
-    private List<Genre> genreList;
+    private final GwtTest<GenreTestContext> gwt = new GwtTest<>(GenreTestContext.class);
 
     @Test
     void all_genres_are_retrieved() {
-        given_a_genre_repository();
-        when_all_genres_are_requested();
-        then_all_genres_are_retrieved();
+        gwt.test()
+                .given(a_genre_repository)
+                .and(genres)
+                .when(requesting_all_genres)
+                .then(all_genres_are_retrieved);
     }
 
-    private void given_a_genre_repository() {
-        genreRepository = Mockito.mock(GenreRepository.class);
-    }
+    private final GwtFunction<GenreTestContext> a_genre_repository = context -> context.genreRepository = Mockito.mock(GenreRepository.class);
 
-    private void when_all_genres_are_requested() {
-        when(genreRepository.getAllGenres()).thenReturn(getAllGenres());
-        genreList = new RetrieveAllGenresInteractor(genreRepository).retrieveAllGenres();
-    }
+    private final GwtFunction<GenreTestContext> genres = context -> context.genreList = getAllGenres();
 
-    private void then_all_genres_are_retrieved() {
-        assertThat(genreList.size(), is(allGenres.size()));
-    }
+    private final GwtFunction<GenreTestContext> requesting_all_genres = context -> {
+        when(context.genreRepository.getAllGenres()).thenReturn(getAllGenres());
+        context.genreList = new RetrieveAllGenresInteractor(context.genreRepository).retrieveAllGenres();
+    };
+
+    private final GwtFunction<GenreTestContext> all_genres_are_retrieved = context -> {
+        assertThat(context.genreList.size(), is(context.allGenres.size()));
+    };
 
     private List<Genre> getAllGenres() {
         return List.of(
@@ -46,6 +49,12 @@ public class GenreRetrievalTest {
                 new Genre("Mystery", 1.1),
                 new Genre("Music", 1.2)
         );
+    }
+
+    public static final class GenreTestContext extends Context {
+        GenreRepository genreRepository;
+        List<Genre> allGenres;
+        List<Genre> genreList;
     }
 
 }

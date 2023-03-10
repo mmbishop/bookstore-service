@@ -5,6 +5,9 @@ import com.improving.bookstore.mappers.BookMapper;
 import com.improving.bookstore.model.*;
 import com.improving.bookstore.repositories.BookDataSource;
 import com.improving.bookstore.repositories.BookRepositoryImpl;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -19,231 +22,227 @@ import static org.mockito.Mockito.when;
 
 public class BookRepositoryImplTest {
 
-    private AuthorMapper authorMapper;
-    private BookData bookData;
-    private BookDataSource bookDataSource;
-    private BookMapper bookMapper;
-    private BookRepositoryImpl bookRepository;
-    private List<Book> bookList;
-    private List<Book> searchResultList;
-    private Optional<Book> searchResult;
+    private GwtTest<BookRepositoryTestContext> gwt = new GwtTest<>(BookRepositoryTestContext.class);
 
     @Test
     void repository_returns_all_books() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_all_books_are_requested_from_the_repository();
-        then_all_books_are_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_all_books_from_the_repository)
+                .then(all_books_are_returned);
     }
 
     @Test
     void repository_finds_a_book_by_id() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_requested_by_id();
-        then_that_book_is_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_a_book_by_id)
+                .then(that_book_is_returned);
     }
 
     @Test
     void repository_returns_empty_object_when_book_not_found_by_id() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_nonexistent_book_is_requested_by_id();
-        then_nothing_is_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_a_nonexistent_book_by_id)
+                .then(nothing_is_returned);
     }
 
     @Test
     void repository_finds_books_by_title() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_requested_by_title();
-        then_the_book_with_that_title_is_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_a_book_by_title)
+                .then(the_book_with_that_title_is_returned);
     }
 
     @Test
     void repository_finds_books_by_author() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_requested_by_author();
-        then_the_book_by_that_author_is_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_a_book_by_author)
+                .then(the_book_by_that_author_is_returned);
     }
 
     @Test
     void repository_finds_books_by_genre() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_requested_by_genre();
-        then_the_books_of_that_genre_are_returned();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(requesting_a_book_by_genre)
+                .then(the_books_of_that_genre_are_returned);
     }
 
     @Test
     void repository_adds_book() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_added_to_the_repository();
-        then_the_repository_adds_the_book_via_the_data_source();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(adding_a_book_to_the_repository)
+                .then(the_repository_adds_the_book_via_the_data_source);
     }
 
     @Test
     void repository_deletes_book() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_deleted_from_the_repository();
-        then_the_repository_deletes_the_book_via_the_data_source();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(deleting_a_book_from_the_repository)
+                .then(the_repository_deletes_the_book_via_the_data_source);
     }
 
     @Test
     void repository_updates_book() {
-        given_a_book_data_source();
-        given_mappers();
-        given_a_book_repository();
-        when_a_book_is_updated_in_the_repository();
-        then_the_repository_updates_the_book_via_the_data_source();
+        gwt.test()
+                .given(a_book_data_source)
+                .and(mappers)
+                .and(a_book_repository)
+                .when(updating_a_book_in_the_repository)
+                .then(the_repository_updates_the_book_via_the_data_source);
     }
 
-    private void given_a_book_data_source() {
-        bookDataSource = Mockito.mock(BookDataSource.class);
-    }
+    private final GwtFunction<BookRepositoryTestContext> a_book_data_source = context -> context.bookDataSource = Mockito.mock(BookDataSource.class);
 
-    private void given_mappers() {
-        authorMapper = Mockito.mock(AuthorMapper.class);
-        bookMapper = Mockito.mock(BookMapper.class);
-    }
+    private final GwtFunction<BookRepositoryTestContext> mappers = context -> {
+        context.authorMapper = Mockito.mock(AuthorMapper.class);
+        context.bookMapper = Mockito.mock(BookMapper.class);
+    };
 
-    private void given_a_book_repository() {
-        bookRepository = new BookRepositoryImpl(bookDataSource, bookMapper, authorMapper);
-    }
+    private final GwtFunction<BookRepositoryTestContext> a_book_repository
+            = context -> context.bookRepository = new BookRepositoryImpl(context.bookDataSource, context.bookMapper, context.authorMapper);
 
-    private void when_all_books_are_requested_from_the_repository() {
+    private final GwtFunction<BookRepositoryTestContext> requesting_all_books_from_the_repository = context -> {
         Iterable<BookData> bookIterable = getBookDataList();
-        when(bookDataSource.findAll()).thenReturn(bookIterable);
+        when(context.bookDataSource.findAll()).thenReturn(bookIterable);
         bookIterable.forEach(bookData -> {
-            when(bookMapper.mapFrom(bookData)).thenReturn(getBook(bookData));
+            when(context.bookMapper.mapFrom(bookData)).thenReturn(getBook(bookData));
         });
-        bookList = bookRepository.getAllBooks();
-    }
+        context.bookList = context.bookRepository.getAllBooks();
+    };
 
-    private void when_a_book_is_requested_by_id() {
+    private final GwtFunction<BookRepositoryTestContext> requesting_a_book_by_id = context -> {
         Book book = getRedMarsBook();
         BookData bookData = getBookData(book);
-        when(bookDataSource.findById(1)).thenReturn(bookData);
-        when(bookMapper.mapFrom(bookData)).thenReturn(book);
-        searchResult = bookRepository.getBookById(1);
-    }
+        when(context.bookDataSource.findById(1)).thenReturn(bookData);
+        when(context.bookMapper.mapFrom(bookData)).thenReturn(book);
+        context.searchResult = context.bookRepository.getBookById(1);
+    };
 
-    private void when_a_nonexistent_book_is_requested_by_id() {
-        when(bookDataSource.findById(2)).thenReturn(null);
-        searchResult = bookRepository.getBookById(2);
-    }
+    private final GwtFunction<BookRepositoryTestContext> requesting_a_nonexistent_book_by_id = context -> {
+        when(context.bookDataSource.findById(2)).thenReturn(null);
+        context.searchResult = context.bookRepository.getBookById(2);
+    };
 
-    private void when_a_book_is_requested_by_title() {
+    private final GwtFunction<BookRepositoryTestContext> requesting_a_book_by_title = context -> {
         Book book = getRedMarsBook();
         BookData bookData = getBookData(book);
-        when(bookDataSource.findByTitle("Red Mars")).thenReturn(Collections.singletonList(bookData));
-        when(bookMapper.mapFrom(bookData)).thenReturn(book);
-        searchResultList = bookRepository.getBooksByTitle("Red Mars");
-    }
+        when(context.bookDataSource.findByTitle("Red Mars")).thenReturn(Collections.singletonList(bookData));
+        when(context.bookMapper.mapFrom(bookData)).thenReturn(book);
+        context.searchResultList = context.bookRepository.getBooksByTitle("Red Mars");
+    };
 
-    private void when_a_book_is_requested_by_author() {
+    private final GwtFunction<BookRepositoryTestContext> requesting_a_book_by_author = context -> {
         Book book = getRedMarsBook();
         BookData bookData = getBookData(book);
         Author author = new Author("Kim", "Stanley", "Robinson");
         AuthorData authorData = getAuthorData(author);
-        when(bookDataSource.findByAuthor(authorData)).thenReturn(Collections.singletonList(bookData));
-        when(bookMapper.mapFrom(bookData)).thenReturn(book);
-        when(authorMapper.mapFrom(author)).thenReturn(authorData);
-        searchResultList = bookRepository.getBooksByAuthor(author);
-    }
+        when(context.bookDataSource.findByAuthor(authorData)).thenReturn(Collections.singletonList(bookData));
+        when(context.bookMapper.mapFrom(bookData)).thenReturn(book);
+        when(context.authorMapper.mapFrom(author)).thenReturn(authorData);
+        context.searchResultList = context.bookRepository.getBooksByAuthor(author);
+    };
 
-    private void when_a_book_is_requested_by_genre() {
+    private final GwtFunction<BookRepositoryTestContext> requesting_a_book_by_genre = context -> {
         List<BookData> bookDataList = getBookDataList();
-        when(bookDataSource.findByGenreName("Science Fiction")).thenReturn(bookDataList);
+        when(context.bookDataSource.findByGenreName("Science Fiction")).thenReturn(bookDataList);
         bookDataList.forEach(bookData -> {
-            when(bookMapper.mapFrom(bookData)).thenReturn(getBook(bookData));
+            when(context.bookMapper.mapFrom(bookData)).thenReturn(getBook(bookData));
         });
-        searchResultList = bookRepository.getBooksByGenre("Science Fiction");
-    }
+        context.searchResultList = context.bookRepository.getBooksByGenre("Science Fiction");
+    };
 
-    private void when_a_book_is_added_to_the_repository() {
+    private final GwtFunction<BookRepositoryTestContext> adding_a_book_to_the_repository = context -> {
         Book book = getRedMarsBook();
-        bookData = getBookData(book);
-        when(authorMapper.mapFrom(book.getAuthor())).thenReturn(bookData.getAuthor());
-        when(bookMapper.mapFrom(book)).thenReturn(bookData);
-        bookRepository.addBook(book);
-    }
+        context.bookData = getBookData(book);
+        when(context.authorMapper.mapFrom(book.getAuthor())).thenReturn(context.bookData.getAuthor());
+        when(context.bookMapper.mapFrom(book)).thenReturn(context.bookData);
+        context.bookRepository.addBook(book);
+    };
 
-    private void when_a_book_is_deleted_from_the_repository() {
+    private final GwtFunction<BookRepositoryTestContext> deleting_a_book_from_the_repository = context -> {
         Book book = getRedMarsBook();
-        bookData = getBookData(book);
-        when(authorMapper.mapFrom(book.getAuthor())).thenReturn(bookData.getAuthor());
-        when(bookMapper.mapFrom(book)).thenReturn(bookData);
-        bookRepository.deleteBook(book);
-    }
+        context.bookData = getBookData(book);
+        when(context.authorMapper.mapFrom(book.getAuthor())).thenReturn(context.bookData.getAuthor());
+        when(context.bookMapper.mapFrom(book)).thenReturn(context.bookData);
+        context.bookRepository.deleteBook(book);
+    };
 
-    private void when_a_book_is_updated_in_the_repository() {
+    private final GwtFunction<BookRepositoryTestContext> updating_a_book_in_the_repository = context -> {
         Book book = getRedMarsBook();
-        bookData = getBookData(book);
-        when(authorMapper.mapFrom(book.getAuthor())).thenReturn(bookData.getAuthor());
-        when(bookMapper.mapFrom(book)).thenReturn(bookData);
-        bookRepository.saveBook(book);
-    }
+        context.bookData = getBookData(book);
+        when(context.authorMapper.mapFrom(book.getAuthor())).thenReturn(context.bookData.getAuthor());
+        when(context.bookMapper.mapFrom(book)).thenReturn(context.bookData);
+        context.bookRepository.saveBook(book);
+    };
 
-    private void then_all_books_are_returned() {
-        assertThat(bookList.size(), is(2));
-        Book book = bookList.get(0);
+    private final GwtFunction<BookRepositoryTestContext> all_books_are_returned = context -> {
+        assertThat(context.bookList.size(), is(2));
+        Book book = context.bookList.get(0);
         assertThat(book.getTitle(), is("Red Mars"));
-        book = bookList.get(1);
+        book = context.bookList.get(1);
         assertThat(book.getTitle(), is("Foundation"));
-    }
+    };
 
-    private void then_that_book_is_returned() {
-        assert searchResult.isPresent();
-        assertThat(searchResult.get().getTitle(), is("Red Mars"));
-    }
+    private final GwtFunction<BookRepositoryTestContext> that_book_is_returned = context -> {
+        assert context.searchResult.isPresent();
+        assertThat(context.searchResult.get().getTitle(), is("Red Mars"));
+    };
 
-    private void then_the_book_with_that_title_is_returned() {
-        assertThat(searchResultList.size(), is(1));
-        assertThat(searchResultList.get(0).getTitle(), is("Red Mars"));
-    }
+    private final GwtFunction<BookRepositoryTestContext> the_book_with_that_title_is_returned = context -> {
+        assertThat(context.searchResultList.size(), is(1));
+        assertThat(context.searchResultList.get(0).getTitle(), is("Red Mars"));
+    };
 
-    private void then_the_book_by_that_author_is_returned() {
-        assertThat(searchResultList.size(), is(1));
-        Book book = searchResultList.get(0);
+    private final GwtFunction<BookRepositoryTestContext> the_book_by_that_author_is_returned = context -> {
+        assertThat(context.searchResultList.size(), is(1));
+        Book book = context.searchResultList.get(0);
         assertThat(book.getTitle(), is("Red Mars"));
         assertThat(book.getAuthor().getLastName(), is("Robinson"));
-    }
+    };
 
-    private void then_the_books_of_that_genre_are_returned() {
-        assertThat(searchResultList.size(), is(2));
-        Book book = searchResultList.get(0);
+    private final GwtFunction<BookRepositoryTestContext> the_books_of_that_genre_are_returned = context -> {
+        assertThat(context.searchResultList.size(), is(2));
+        Book book = context.searchResultList.get(0);
         assertThat(book.getTitle(), is("Red Mars"));
-        book = searchResultList.get(1);
+        book = context.searchResultList.get(1);
         assertThat(book.getTitle(), is("Foundation"));
-    }
+    };
 
-    private void then_nothing_is_returned() {
-        assert searchResult.isEmpty();
-    }
+    private final GwtFunction<BookRepositoryTestContext> nothing_is_returned = context -> {
+        assert context.searchResult.isEmpty();
+    };
 
-    private void then_the_repository_adds_the_book_via_the_data_source() {
-        verify(bookDataSource).save(bookData);
-    }
+    private final GwtFunction<BookRepositoryTestContext> the_repository_adds_the_book_via_the_data_source
+            = context -> verify(context.bookDataSource).save(context.bookData);
 
-    private void then_the_repository_deletes_the_book_via_the_data_source() {
-        verify(bookDataSource).delete(bookData);
-    }
+    private final GwtFunction<BookRepositoryTestContext> the_repository_deletes_the_book_via_the_data_source
+            = context -> verify(context.bookDataSource).delete(context.bookData);
 
-    private void then_the_repository_updates_the_book_via_the_data_source() {
-        verify(bookDataSource).save(bookData);
-    }
+    private final GwtFunction<BookRepositoryTestContext> the_repository_updates_the_book_via_the_data_source
+            = context -> verify(context.bookDataSource).save(context.bookData);
 
     private Book createBook(String title, Author author, String publisher, int publishYear, String isbn, int numberOfPages, Genre genre) {
         return new Book(title, author, publisher, publishYear, isbn, numberOfPages, genre);
@@ -301,6 +300,17 @@ public class BookRepositoryImplTest {
 
     private Genre getGenre(GenreData genreData) {
         return new Genre(genreData.getName(), genreData.getPricingFactor());
+    }
+
+    public static class BookRepositoryTestContext extends Context {
+        AuthorMapper authorMapper;
+        BookData bookData;
+        BookDataSource bookDataSource;
+        BookMapper bookMapper;
+        BookRepositoryImpl bookRepository;
+        List<Book> bookList;
+        List<Book> searchResultList;
+        Optional<Book> searchResult;
     }
 
 }

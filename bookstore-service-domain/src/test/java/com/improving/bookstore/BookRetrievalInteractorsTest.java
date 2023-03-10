@@ -8,6 +8,9 @@ import com.improving.bookstore.interactors.RetrieveAllBooksInteractor;
 import com.improving.bookstore.interactors.RetrieveBooksByAuthorInteractor;
 import com.improving.bookstore.interactors.RetrieveBooksByGenreInteractor;
 import com.improving.bookstore.interactors.RetrieveBooksByTitleInteractor;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -21,96 +24,101 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class BookRetrievalInteractorsTest {
 
-    private BookRepository bookRepository;
-    private List<Book> bookInventory = getBookInventory();
-    private List<Book> bookList;
+    private final GwtTest<BookTestContext> gwt = new GwtTest<>(BookTestContext.class);
 
     @Test
     void all_books_are_retrieved() {
-        given_a_book_repository();
-        when_all_books_are_requested();
-        then_all_books_are_retrieved();
+        gwt.test()
+                .given(a_book_repository)
+                .and(a_book_inventory)
+                .when(requesting_all_books)
+                .then(all_books_are_retrieved);
     }
 
     @Test
     void books_are_retrieved_by_title() {
-        given_a_book_repository();
-        when_a_book_is_requested_by_title();
-        then_the_book_with_that_title_is_retrieved();
+        gwt.test()
+                .given(a_book_repository)
+                .and(a_book_inventory)
+                .when(requesting_a_book_by_title)
+                .then(the_book_with_that_title_is_retrieved);
     }
 
     @Test
     void books_are_retrieved_by_author() {
-        given_a_book_repository();
-        when_all_books_are_requested_by_author();
-        then_all_books_by_that_author_are_retrieved();
+        gwt.test()
+                .given(a_book_repository)
+                .and(a_book_inventory)
+                .when(requesting_all_books_by_author)
+                .then(all_books_by_that_author_are_retrieved);
     }
 
     @Test
     void books_are_retrieved_by_genre() {
-        given_a_book_repository();
-        when_all_books_are_requested_by_genre();
-        then_all_books_of_that_genre_are_retrieved();
+        gwt.test()
+                .given(a_book_repository)
+                .and(a_book_inventory)
+                .when(requesting_all_books_by_genre)
+                .then(all_books_of_that_genre_are_retrieved);
     }
 
-    private void given_a_book_repository() {
-        bookRepository = Mockito.mock(BookRepository.class);
-    }
+    private final GwtFunction<BookTestContext> a_book_repository = context -> context.bookRepository = Mockito.mock(BookRepository.class);
 
-    private void when_all_books_are_requested() {
-        when(bookRepository.getAllBooks()).thenReturn(bookInventory);
-        bookList = new RetrieveAllBooksInteractor(bookRepository).retrieveAllBooks();
-    }
+    private final GwtFunction<BookTestContext> a_book_inventory = context -> context.bookInventory = getBookInventory();
 
-    private void when_a_book_is_requested_by_title() {
-        when(bookRepository.getBooksByTitle("Foundation")).thenReturn(List.of(getBook("Foundation")));
-        bookList = new RetrieveBooksByTitleInteractor(bookRepository).retrieveBooksByTitle("Foundation");
-    }
+    private final GwtFunction<BookTestContext> requesting_all_books = context -> {
+        when(context.bookRepository.getAllBooks()).thenReturn(context.bookInventory);
+        context.bookList = new RetrieveAllBooksInteractor(context.bookRepository).retrieveAllBooks();
+    };
 
-    private void when_all_books_are_requested_by_author() {
+    private final GwtFunction<BookTestContext> requesting_a_book_by_title = context -> {
+        when(context.bookRepository.getBooksByTitle("Foundation")).thenReturn(List.of(getBook("Foundation", context.bookInventory)));
+        context.bookList = new RetrieveBooksByTitleInteractor(context.bookRepository).retrieveBooksByTitle("Foundation");
+    };
+
+    private final GwtFunction<BookTestContext> requesting_all_books_by_author = context -> {
         Author isaacAsimov = createAuthor("Isaac", "Asimov");
-        when(bookRepository.getBooksByAuthor(isaacAsimov)).thenReturn(List.of(
-                getBook("Foundation"),
-                getBook("Foundation and Empire")
+        when(context.bookRepository.getBooksByAuthor(isaacAsimov)).thenReturn(List.of(
+                getBook("Foundation", context.bookInventory),
+                getBook("Foundation and Empire", context.bookInventory)
         ));
-        bookList = new RetrieveBooksByAuthorInteractor(bookRepository).retrieveBooksByAuthor(isaacAsimov);
-    }
+        context.bookList = new RetrieveBooksByAuthorInteractor(context.bookRepository).retrieveBooksByAuthor(isaacAsimov);
+    };
 
-    private void when_all_books_are_requested_by_genre() {
-        when(bookRepository.getBooksByGenre("Science Fiction")).thenReturn(List.of(
-                getBook("Foundation"),
-                getBook("Foundation and Empire"),
-                getBook("Fahrenheit 451")
+    private final GwtFunction<BookTestContext> requesting_all_books_by_genre = context -> {
+        when(context.bookRepository.getBooksByGenre("Science Fiction")).thenReturn(List.of(
+                getBook("Foundation", context.bookInventory),
+                getBook("Foundation and Empire", context.bookInventory),
+                getBook("Fahrenheit 451", context.bookInventory)
         ));
-        bookList = new RetrieveBooksByGenreInteractor(bookRepository).retrieveBooksByGenre("Science Fiction");
-    }
+        context.bookList = new RetrieveBooksByGenreInteractor(context.bookRepository).retrieveBooksByGenre("Science Fiction");
+    };
 
-    private void then_all_books_are_retrieved() {
-        assertThat(bookList.size(), is(bookInventory.size()));
-    }
+    private final GwtFunction<BookTestContext> all_books_are_retrieved
+            = context ->  assertThat(context.bookList.size(), is(context.bookInventory.size()));
 
-    private void then_the_book_with_that_title_is_retrieved() {
-        assertThat(bookList.size(), is(1));
-        assertThat(bookList.get(0).getTitle(), is("Foundation"));
-    }
+    private final GwtFunction<BookTestContext> the_book_with_that_title_is_retrieved = context -> {
+        assertThat(context.bookList.size(), is(1));
+        assertThat(context.bookList.get(0).getTitle(), is("Foundation"));
+    };
 
-    private void then_all_books_by_that_author_are_retrieved() {
-        assertThat(bookList.size(), is(2));
-        bookList.forEach(book -> {
+    private final GwtFunction<BookTestContext> all_books_by_that_author_are_retrieved = context -> {
+        assertThat(context.bookList.size(), is(2));
+        context.bookList.forEach(book -> {
             if (! "Isaac".equals(book.getAuthor().getFirstName()) || ! "Asimov".equals(book.getAuthor().getLastName())) {
                 fail("Author must be Isaac Asimov");
             }
         });
-    }
+    };
 
-    private void then_all_books_of_that_genre_are_retrieved() {
-        assertThat(bookList.size(), is(3));
-        bookList.forEach(book -> {
+    private final GwtFunction<BookTestContext> all_books_of_that_genre_are_retrieved = context -> {
+        assertThat(context.bookList.size(), is(3));
+        context.bookList.forEach(book -> {
             if (! "Science Fiction".equals(book.getGenre().getName())) {
                 fail("Genre must be Science Fiction");
             }
         });
-    }
+    };
 
     private List<Book> getBookInventory() {
         return List.of(
@@ -121,7 +129,7 @@ public class BookRetrievalInteractorsTest {
         );
     }
 
-    private Book getBook(String title) {
+    private Book getBook(String title, List<Book> bookInventory) {
         Optional<Book> book = bookInventory.stream().filter(b -> title.equals(b.getTitle())).findFirst();
         return book.orElse(null);
     }
@@ -137,6 +145,12 @@ public class BookRetrievalInteractorsTest {
 
     private Author createAuthor(String firstName, String lastName) {
         return new Author(firstName, null, lastName);
+    }
+
+    public static final class BookTestContext extends Context {
+        BookRepository bookRepository;
+        List<Book> bookInventory;
+        List<Book> bookList;
     }
 
 }

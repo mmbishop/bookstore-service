@@ -4,6 +4,9 @@ import com.improving.bookstore.mappers.AuthorMapper;
 import com.improving.bookstore.mappers.BookMapper;
 import com.improving.bookstore.mappers.GenreMapper;
 import com.improving.bookstore.model.*;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -17,161 +20,167 @@ import static org.mockito.Mockito.when;
 
 public class BookMapperTest {
 
-    private Author authorDomainEntity;
-    private AuthorData authorDataEntity;
-    private AuthorMapper authorMapper;
-    private Book bookDomainEntity;
-    private BookData bookDataEntity;
-    private BookMapper bookMapper;
-    private Genre genreDomainEntity;
-    private GenreData genreDataEntity;
-    private GenreMapper genreMapper;
+    private final GwtTest<BookMapperTestContext> gwt = new GwtTest<>(BookMapperTestContext.class);
 
     @Test
     void mapper_maps_data_entity_to_domain_entity() {
-        given_a_set_of_mappers();
-        given_an_author_data_entity();
-        given_an_author_domain_entity();
-        given_a_genre_data_entity();
-        given_a_genre_domain_entity();
-        given_a_book_data_entity();
-        when_the_book_data_entity_is_mapped_to_a_domain_entity();
-        then_the_book_domain_entity_is_produced();
+        gwt.test()
+                .given(
+                        a_set_of_mappers,
+                        an_author_data_entity,
+                        an_author_domain_entity,
+                        a_genre_data_entity,
+                        a_genre_domain_entity,
+                        a_book_data_entity
+                )
+                .when(mapping_the_book_data_entity_to_a_domain_entity)
+                .then(the_book_domain_entity_is_produced);
     }
 
     @Test
     void mapper_maps_domain_entity_to_data_entity() {
-        given_a_set_of_mappers();
-        given_an_author_data_entity();
-        given_an_author_domain_entity();
-        given_a_genre_data_entity();
-        given_a_genre_domain_entity();
-        given_a_book_domain_entity();
-        when_the_book_domain_entity_is_mapped_to_a_data_entity();
-        then_the_book_data_entity_is_produced();
+        gwt.test()
+                .given(
+                        a_set_of_mappers,
+                        an_author_domain_entity,
+                        an_author_data_entity,
+                        a_genre_data_entity,
+                        a_genre_domain_entity,
+                        a_book_domain_entity
+                )
+                .when(mapping_the_book_domain_entity_to_a_data_entity)
+                .then(the_book_data_entity_is_produced);
     }
 
     @Test
     void mapper_returns_null_when_data_entity_is_null() {
-        given_a_set_of_mappers();
-        when_a_null_book_data_entity_is_mapped_to_a_domain_entity();
-        then_the_book_domain_entity_is_null();
+        gwt.test()
+                .given(a_set_of_mappers)
+                .when(mapping_a_null_book_data_entity_to_a_domain_entity)
+                .then(the_book_domain_entity_is_null);
     }
 
     @Test
     void mapper_returns_null_when_domain_entity_is_null() {
-        given_a_set_of_mappers();
-        when_the_book_domain_entity_is_mapped_to_a_data_entity();
-        then_the_book_data_entity_is_null();
+        gwt.test()
+                .given(a_set_of_mappers)
+                .when(mapping_a_null_book_domain_entity_to_a_data_entity)
+                .then(the_book_data_entity_is_null);
     }
 
-    private void given_a_set_of_mappers() {
-        authorMapper = Mockito.mock(AuthorMapper.class);
-        genreMapper = Mockito.mock(GenreMapper.class);
-        bookMapper = new BookMapper(authorMapper, genreMapper);
-    }
+    private final GwtFunction<BookMapperTestContext> a_set_of_mappers = context -> {
+        context.authorMapper = Mockito.mock(AuthorMapper.class);
+        context.genreMapper = Mockito.mock(GenreMapper.class);
+        context.bookMapper = new BookMapper(context.authorMapper, context.genreMapper);
+    };
 
-    private void given_a_book_data_entity() {
-        bookDataEntity = new BookData();
-        bookDataEntity.setId(1);
-        bookDataEntity.setTitle("The Tales of Edgar Allan Poe");
-        bookDataEntity.setPublisher("The Publisher");
-        bookDataEntity.setPublishYear(1840);
-        bookDataEntity.setIsbn("An ISBN");
-        bookDataEntity.setNumberOfPages(360);
-        bookDataEntity.setPrice(BigDecimal.valueOf(7.2));
-        bookDataEntity.setAuthor(authorDataEntity);
-        bookDataEntity.setGenre(genreDataEntity);
-    }
+    private final GwtFunction<BookMapperTestContext> a_book_data_entity = context -> {
+        context.bookDataEntity = new BookData();
+        context.bookDataEntity.setId(1);
+        context.bookDataEntity.setTitle("The Tales of Edgar Allan Poe");
+        context.bookDataEntity.setPublisher("The Publisher");
+        context.bookDataEntity.setPublishYear(1840);
+        context.bookDataEntity.setIsbn("An ISBN");
+        context.bookDataEntity.setNumberOfPages(360);
+        context.bookDataEntity.setPrice(BigDecimal.valueOf(7.2));
+        context.bookDataEntity.setAuthor(context.authorDataEntity);
+        context.bookDataEntity.setGenre(context.genreDataEntity);
+    };
 
-    private void given_a_book_domain_entity() {
-        bookDomainEntity = new Book(1,"The Tales of Edgar Allan Poe", authorDomainEntity, "The Publisher", 1840, "An ISBN", 360,
-                genreDomainEntity);
-    }
+    private final GwtFunction<BookMapperTestContext> a_book_domain_entity = context -> {
+        context.bookDomainEntity = new Book(1,"The Tales of Edgar Allan Poe", context.authorDomainEntity, "The Publisher",
+                1840, "An ISBN", 360, context.genreDomainEntity);
+    };
 
-    private void given_an_author_data_entity() {
-        authorDataEntity = new AuthorData();
-        authorDataEntity.setId(1);
-        authorDataEntity.setFirstName("Edgar");
-        authorDataEntity.setMiddleName("Allan");
-        authorDataEntity.setLastName("Poe");
-    }
+    private final GwtFunction<BookMapperTestContext> an_author_data_entity = context -> {
+        context.authorDataEntity = new AuthorData();
+        context.authorDataEntity.setId(1);
+        context.authorDataEntity.setFirstName("Edgar");
+        context.authorDataEntity.setMiddleName("Allan");
+        context.authorDataEntity.setLastName("Poe");
+    };
 
-    private void given_an_author_domain_entity() {
-        authorDomainEntity = new Author("Edgar", "Allan", "Poe");
-    }
+    private final GwtFunction<BookMapperTestContext> an_author_domain_entity = context -> {
+        context.authorDomainEntity = new Author("Edgar", "Allan", "Poe");
+    };
 
-    private void given_a_genre_data_entity() {
-        genreDataEntity = new GenreData();
-        genreDataEntity.setId(1);
-        genreDataEntity.setName("Fiction");
-        genreDataEntity.setPricingFactor(1.0);
-    }
+    private final GwtFunction<BookMapperTestContext> a_genre_data_entity = context -> {
+        context.genreDataEntity = new GenreData();
+        context.genreDataEntity.setId(1);
+        context.genreDataEntity.setName("Fiction");
+        context.genreDataEntity.setPricingFactor(1.0);
+    };
 
-    private void given_a_genre_domain_entity() {
-        genreDomainEntity = new Genre("Fiction", 1.0);
-    }
+    private final GwtFunction<BookMapperTestContext> a_genre_domain_entity = context -> {
+        context.genreDomainEntity = new Genre("Fiction", 1.0);
+    };
 
-    private void when_the_book_data_entity_is_mapped_to_a_domain_entity() {
-        when(authorMapper.mapFrom(authorDataEntity)).thenReturn(authorDomainEntity);
-        when(genreMapper.mapFrom(genreDataEntity)).thenReturn(genreDomainEntity);
-        bookDomainEntity = bookMapper.mapFrom(bookDataEntity);
-    }
+    private final GwtFunction<BookMapperTestContext> mapping_the_book_data_entity_to_a_domain_entity = context -> {
+        when(context.authorMapper.mapFrom(context.authorDataEntity)).thenReturn(context.authorDomainEntity);
+        when(context.genreMapper.mapFrom(context.genreDataEntity)).thenReturn(context.genreDomainEntity);
+        context.bookDomainEntity = context.bookMapper.mapFrom(context.bookDataEntity);
+    };
 
-    private void when_the_book_domain_entity_is_mapped_to_a_data_entity() {
-        when(authorMapper.mapFrom(authorDomainEntity)).thenReturn(authorDataEntity);
-        when(genreMapper.mapFrom(genreDomainEntity)).thenReturn(genreDataEntity);
-        bookDataEntity = bookMapper.mapFrom(bookDomainEntity);
-    }
+    private final GwtFunction<BookMapperTestContext> mapping_the_book_domain_entity_to_a_data_entity = context -> {
+        when(context.authorMapper.mapFrom(context.authorDomainEntity)).thenReturn(context.authorDataEntity);
+        when(context.genreMapper.mapFrom(context.genreDomainEntity)).thenReturn(context.genreDataEntity);
+        context.bookDataEntity = context.bookMapper.mapFrom(context.bookDomainEntity);
+    };
 
-    private void when_a_null_book_domain_entity_is_mapped_to_a_data_entity() {
-        bookDataEntity = bookMapper.mapFrom((Book) null);
-    }
+    private final GwtFunction<BookMapperTestContext> mapping_a_null_book_domain_entity_to_a_data_entity
+            = context -> context.bookDataEntity = context.bookMapper.mapFrom((Book) null);
 
-    private void when_a_null_book_data_entity_is_mapped_to_a_domain_entity() {
-        bookDomainEntity = bookMapper.mapFrom((BookData) null);
-    }
+    private final GwtFunction<BookMapperTestContext> mapping_a_null_book_data_entity_to_a_domain_entity
+            = context -> context.bookDomainEntity = context.bookMapper.mapFrom((BookData) null);
 
-    private void then_the_book_domain_entity_is_produced() {
-        assertThat(bookDomainEntity.getId(), is(1));
-        assertThat(bookDomainEntity.getTitle(), is("The Tales of Edgar Allan Poe"));
-        assertThat(bookDomainEntity.getPublisher(), is("The Publisher"));
-        assertThat(bookDomainEntity.getPublishYear(), is(1840));
-        assertThat(bookDomainEntity.getIsbn(), is("An ISBN"));
-        assertThat(bookDomainEntity.getNumberOfPages(), is(360));
-        assertThat(bookDomainEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
-        Author author = bookDomainEntity.getAuthor();
+    private final GwtFunction<BookMapperTestContext> the_book_domain_entity_is_produced = context -> {
+        assertThat(context.bookDomainEntity.getId(), is(1));
+        assertThat(context.bookDomainEntity.getTitle(), is("The Tales of Edgar Allan Poe"));
+        assertThat(context.bookDomainEntity.getPublisher(), is("The Publisher"));
+        assertThat(context.bookDomainEntity.getPublishYear(), is(1840));
+        assertThat(context.bookDomainEntity.getIsbn(), is("An ISBN"));
+        assertThat(context.bookDomainEntity.getNumberOfPages(), is(360));
+        assertThat(context.bookDomainEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
+        Author author = context.bookDomainEntity.getAuthor();
         assertThat(author.getFirstName(), is("Edgar"));
         assertThat(author.getMiddleName(), is("Allan"));
         assertThat(author.getLastName(), is("Poe"));
-        Genre genre = bookDomainEntity.getGenre();
+        Genre genre = context.bookDomainEntity.getGenre();
         assertThat(genre.getName(), is("Fiction"));
         assertThat(genre.getPricingFactor(), is(1.0));
-    }
+    };
 
-    private void then_the_book_data_entity_is_produced() {
-        assertThat(bookDataEntity.getId(), is(1));
-        assertThat(bookDataEntity.getTitle(), is("The Tales of Edgar Allan Poe"));
-        assertThat(bookDataEntity.getPublisher(), is("The Publisher"));
-        assertThat(bookDataEntity.getPublishYear(), is(1840));
-        assertThat(bookDataEntity.getIsbn(), is("An ISBN"));
-        assertThat(bookDataEntity.getNumberOfPages(), is(360));
-        assertThat(bookDataEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
-        AuthorData authorData = bookDataEntity.getAuthor();
+    private final GwtFunction<BookMapperTestContext> the_book_data_entity_is_produced = context -> {
+        assertThat(context.bookDataEntity.getId(), is(1));
+        assertThat(context.bookDataEntity.getTitle(), is("The Tales of Edgar Allan Poe"));
+        assertThat(context.bookDataEntity.getPublisher(), is("The Publisher"));
+        assertThat(context.bookDataEntity.getPublishYear(), is(1840));
+        assertThat(context.bookDataEntity.getIsbn(), is("An ISBN"));
+        assertThat(context.bookDataEntity.getNumberOfPages(), is(360));
+        assertThat(context.bookDataEntity.getPrice(), is(new BigDecimal(7.2, new MathContext(3))));
+        AuthorData authorData = context.bookDataEntity.getAuthor();
         assertThat(authorData.getFirstName(), is("Edgar"));
         assertThat(authorData.getMiddleName(), is("Allan"));
         assertThat(authorData.getLastName(), is("Poe"));
-        GenreData genreData = bookDataEntity.getGenre();
+        GenreData genreData = context.bookDataEntity.getGenre();
         assertThat(genreData.getName(), is("Fiction"));
         assertThat(genreData.getPricingFactor(), is(1.0));
-    }
+    };
 
-    private void then_the_book_domain_entity_is_null() {
-        assertThat(bookDomainEntity, is(nullValue()));
-    }
+    private final GwtFunction<BookMapperTestContext> the_book_domain_entity_is_null = context -> assertThat(context.bookDomainEntity, is(nullValue()));
 
-    private void then_the_book_data_entity_is_null() {
-        assertThat(bookDataEntity, is(nullValue()));
+    private final GwtFunction<BookMapperTestContext> the_book_data_entity_is_null = context -> assertThat(context.bookDataEntity, is(nullValue()));
+
+    public static class BookMapperTestContext extends Context {
+        Author authorDomainEntity;
+        AuthorData authorDataEntity;
+        AuthorMapper authorMapper;
+        Book bookDomainEntity;
+        BookData bookDataEntity;
+        BookMapper bookMapper;
+        Genre genreDomainEntity;
+        GenreData genreDataEntity;
+        GenreMapper genreMapper;
     }
 
 }

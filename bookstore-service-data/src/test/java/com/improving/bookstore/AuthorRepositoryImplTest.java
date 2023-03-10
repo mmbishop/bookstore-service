@@ -5,6 +5,9 @@ import com.improving.bookstore.model.Author;
 import com.improving.bookstore.model.AuthorData;
 import com.improving.bookstore.repositories.AuthorDataSource;
 import com.improving.bookstore.repositories.AuthorRepositoryImpl;
+import io.github.mmbishop.gwttest.core.GwtTest;
+import io.github.mmbishop.gwttest.functions.GwtFunction;
+import io.github.mmbishop.gwttest.model.Context;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -19,115 +22,111 @@ import static org.mockito.Mockito.when;
 
 public class AuthorRepositoryImplTest {
 
-    private AuthorData authorData;
-    private AuthorDataSource authorDataSource;
-    private AuthorMapper authorMapper;
-    private AuthorRepositoryImpl authorRepository;
-    private List<Author> authorList;
-    private Optional<Author> searchResult;
+    private final GwtTest<AuthorRepositoryTestContext> gwt = new GwtTest<>(AuthorRepositoryTestContext.class);
 
     @Test
     void repository_adds_author() {
-        given_an_author_data_source();
-        given_an_author_mapper();
-        given_an_author_repository();
-        when_an_author_is_added_to_the_repository();
-        then_the_repository_adds_the_author_via_the_data_source();
+        gwt.test()
+                .given(an_author_data_source)
+                .and(an_author_mapper)
+                .and(an_author_repository)
+                .when(adding_an_author_to_the_repository)
+                .then(the_repository_adds_the_author_via_the_data_source);
     }
 
     @Test
     void repository_returns_author_by_example_when_author_is_found() {
-        given_an_author_data_source();
-        given_an_author_mapper();
-        given_an_author_repository();
-        when_the_repository_is_searched_for_an_author_that_exists();
-        then_the_author_is_returned();
+        gwt.test()
+                .given(an_author_data_source)
+                .and(an_author_mapper)
+                .and(an_author_repository)
+                .when(searching_the_repository_for_an_author_that_exists)
+                .then(the_author_is_returned);
     }
 
     @Test
     void repository_returns_empty_object_when_author_is_not_found() {
-        given_an_author_data_source();
-        given_an_author_repository();
-        when_the_repository_is_searched_for_an_author_that_does_not_exist();
-        then_nothing_is_returned();
+        gwt.test()
+                .given(an_author_data_source)
+                .and(an_author_mapper)
+                .and(an_author_repository)
+                .when(searching_the_repository_for_an_author_that_does_not_exist)
+                .then(nothing_is_returned);
     }
 
     @Test
     void repository_returns_all_authors_in_the_repository() {
-        given_an_author_data_source();
-        given_an_author_mapper();
-        given_an_author_repository();
-        when_all_authors_are_requested_from_the_repository();
-        then_all_authors_are_returned();
+        gwt.test()
+                .given(an_author_data_source)
+                .and(an_author_mapper)
+                .and(an_author_repository)
+                .when(requesting_all_authors_from_the_repository)
+                .then(all_authors_are_returned);
     }
 
-    private void given_an_author_data_source() {
-        authorDataSource = Mockito.mock(AuthorDataSource.class);
-    }
+    private final GwtFunction<AuthorRepositoryTestContext> an_author_data_source
+            = context -> context.authorDataSource = Mockito.mock(AuthorDataSource.class);
 
-    private void given_an_author_mapper() {
-        authorMapper = Mockito.mock(AuthorMapper.class);
-    }
+    private final GwtFunction<AuthorRepositoryTestContext> an_author_mapper
+            = context -> context.authorMapper = Mockito.mock(AuthorMapper.class);
 
-    private void given_an_author_repository() {
-        authorRepository = new AuthorRepositoryImpl(authorDataSource, authorMapper);
-    }
+    private final GwtFunction<AuthorRepositoryTestContext> an_author_repository
+            = context -> context.authorRepository = new AuthorRepositoryImpl(context.authorDataSource, context.authorMapper);
 
-    private void when_an_author_is_added_to_the_repository() {
+    private final GwtFunction<AuthorRepositoryTestContext> adding_an_author_to_the_repository = context -> {
         Author author = getAuthor();
-        authorData = getAuthorData();
-        when(authorMapper.mapFrom(author)).thenReturn(authorData);
-        authorRepository.addAuthor(getAuthor());
-    }
+        context.authorData = getAuthorData();
+        when(context.authorMapper.mapFrom(author)).thenReturn(context.authorData);
+        context.authorRepository.addAuthor(getAuthor());
+    };
 
-    private void when_the_repository_is_searched_for_an_author_that_exists() {
+    private final GwtFunction<AuthorRepositoryTestContext> searching_the_repository_for_an_author_that_exists = context -> {
         Author author = getAuthor();
-        authorData = getAuthorData();
-        when(authorDataSource.findByFirstNameAndMiddleNameAndLastName("Edgar", "Allan", "Poe"))
-                .thenReturn(Collections.singletonList(authorData));
-        when(authorMapper.mapFrom(authorData)).thenReturn(author);
-        searchResult = authorRepository.getAuthorByExample(author);
-    }
+        context.authorData = getAuthorData();
+        when(context.authorDataSource.findByFirstNameAndMiddleNameAndLastName("Edgar", "Allan", "Poe"))
+                .thenReturn(Collections.singletonList(context.authorData));
+        when(context.authorMapper.mapFrom(context.authorData)).thenReturn(author);
+        context.searchResult = context.authorRepository.getAuthorByExample(author);
+    };
 
-    private void when_the_repository_is_searched_for_an_author_that_does_not_exist() {
+    private final GwtFunction<AuthorRepositoryTestContext> searching_the_repository_for_an_author_that_does_not_exist = context -> {
         Author author = getAuthor();
-        when(authorDataSource.findByFirstNameAndMiddleNameAndLastName("Edgar", "Allan", "Poe"))
+        when(context.authorDataSource.findByFirstNameAndMiddleNameAndLastName("Edgar", "Allan", "Poe"))
                 .thenReturn(Collections.emptyList());
-        searchResult = authorRepository.getAuthorByExample(author);
-    }
+        context.searchResult = context.authorRepository.getAuthorByExample(author);
+    };
 
-    private void when_all_authors_are_requested_from_the_repository() {
+    private final GwtFunction<AuthorRepositoryTestContext> requesting_all_authors_from_the_repository  = context -> {
         Iterable<AuthorData> authorDataIterable = getAuthorDataList();
-        when(authorDataSource.findAll()).thenReturn(authorDataIterable);
+        when(context.authorDataSource.findAll()).thenReturn(authorDataIterable);
         authorDataIterable.forEach(authorData -> {
-            when(authorMapper.mapFrom(authorData)).thenReturn(new Author(authorData.getFirstName(), authorData.getMiddleName(), authorData.getLastName()));
+            when(context.authorMapper.mapFrom(authorData)).thenReturn(new Author(authorData.getFirstName(), authorData.getMiddleName(), authorData.getLastName()));
         });
-        authorList = authorRepository.getAllAuthors();
-    }
+        context.authorList = context.authorRepository.getAllAuthors();
+    };
 
-    private void then_the_repository_adds_the_author_via_the_data_source() {
-        verify(authorDataSource).save(authorData);
-    }
+    private final GwtFunction<AuthorRepositoryTestContext> the_repository_adds_the_author_via_the_data_source
+            = context -> verify(context.authorDataSource).save(context.authorData);
 
-    private void then_the_author_is_returned() {
-        assert searchResult.isPresent();
-        Author author = searchResult.get();
+    private final GwtFunction<AuthorRepositoryTestContext> the_author_is_returned = context -> {
+        assert context.searchResult.isPresent();
+        Author author = context.searchResult.get();
         assertThat(author.getFirstName(), is("Edgar"));
         assertThat(author.getMiddleName(), is("Allan"));
         assertThat(author.getLastName(), is("Poe"));
-    }
+    };
 
-    private void then_nothing_is_returned() {
-        assert searchResult.isEmpty();
-    }
+    private final GwtFunction<AuthorRepositoryTestContext> nothing_is_returned = context -> {
+        assert context.searchResult.isEmpty();
+    };
 
-    private void then_all_authors_are_returned() {
-        assertThat(authorList.size(), is(2));
-        Author author = authorList.get(0);
+    private final GwtFunction<AuthorRepositoryTestContext> all_authors_are_returned = context -> {
+        assertThat(context.authorList.size(), is(2));
+        Author author = context.authorList.get(0);
         assertThat(author.getLastName(), is("Poe"));
-        author = authorList.get(1);
+        author = context.authorList.get(1);
         assertThat(author.getLastName(), is("Robinson"));
-    }
+    };
 
     private Author getAuthor() {
         return new Author("Edgar", "Allan", "Poe");
@@ -151,6 +150,15 @@ public class AuthorRepositoryImplTest {
                 createAuthorData(1, "Edgar", "Allan", "Poe"),
                 createAuthorData(2, "Kim", "Stanley", "Robinson")
         );
+    }
+
+    public static final class AuthorRepositoryTestContext extends Context {
+        AuthorData authorData;
+        AuthorDataSource authorDataSource;
+        AuthorMapper authorMapper;
+        AuthorRepositoryImpl authorRepository;
+        List<Author> authorList;
+        Optional<Author> searchResult;
     }
 
 }
